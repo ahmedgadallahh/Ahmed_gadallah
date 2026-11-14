@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Who Is This Great Leader? — Interactive Presentation</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Poppins:wght@500;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #070d19;
+      --bg-navy: #0f172a;
+      --gold: #f59e0b;
+      --gold-light: #fcd34d;
+      --emerald: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 50% 20%, #162238 0%, #070d19 100%);
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Subtle Geometric Animated Background */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(245, 158, 11, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(245, 158, 11, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatOrb 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -30px) scale(1.12); }
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(30, 41, 59, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .glass-gold {
+      background: rgba(245, 158, 11, 0.08);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.12);
+    }
+
+    /* Slide Transitions */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1.5rem 5.5rem 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(28px) scale(0.97);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  visibility 0.65s;
+      z-index: 10;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .slide.active .anim-item {
+      animation: fadeUpItem 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .anim-item {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+
+    .delay-1 { animation-delay: 0.12s !important; }
+    .delay-2 { animation-delay: 0.25s !important; }
+    .delay-3 { animation-delay: 0.38s !important; }
+    .delay-4 { animation-delay: 0.52s !important; }
+    .delay-5 { animation-delay: 0.66s !important; }
+
+    @keyframes fadeUpItem {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .mystery-pulse {
+      animation: pulseGlow 2.4s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 25px rgba(245, 158, 11, 0.35), inset 0 0 15px rgba(245, 158, 11, 0.2);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 55px rgba(245, 158, 11, 0.75), inset 0 0 25px rgba(245, 158, 11, 0.4);
+        transform: scale(1.05);
+      }
+    }
+
+    .radar-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(245, 158, 11, 0.45);
+      animation: radarExpand 3s infinite cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .radar-ring:nth-child(2) { animation-delay: 1s; }
+    .radar-ring:nth-child(3) { animation-delay: 2s; }
+
+    @keyframes radarExpand {
+      0% { width: 110px; height: 110px; opacity: 0.9; }
+      100% { width: 420px; height: 420px; opacity: 0; }
+    }
+
+    /* Cinematic Spotlight Overlay */
+    .spotlight-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 25;
+    }
+    .spotlight-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .spotlight-box {
+      position: relative;
+      z-index: 30;
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .spotlight-box.highlighted {
+      transform: scale(1.05);
+      box-shadow: 0 0 60px rgba(245, 158, 11, 0.5), inset 0 0 20px rgba(245, 158, 11, 0.2);
+      border-color: #fbbf24 !important;
+      background: rgba(30, 41, 59, 0.95) !important;
+    }
+
+    .region-node {
+      opacity: 0.35;
+      transform: scale(0.92);
+      transition: all 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .region-node.lit {
+      opacity: 1;
+      transform: scale(1);
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.14);
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+    }
+
+    /* Slide 11: Kahoot-Style Dramatic Reveal */
+    #slide-11 {
+      background: radial-gradient(circle at center, #090d16 0%, #020408 100%);
+      transition: background 1.2s ease;
+    }
+
+    #slide-11.revealed {
+      background: radial-gradient(circle at 50% 45%, rgba(251, 191, 36, 0.28) 0%, rgba(16, 185, 129, 0.12) 45%, #070d19 85%);
+    }
+
+    .spotlight-beam {
+      position: absolute;
+      top: -15%;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0.2);
+      width: 110vw;
+      height: 130vh;
+      background: conic-gradient(from 162deg at 50% 0%, transparent 0deg, rgba(253, 224, 71, 0.24) 18deg, transparent 36deg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+    }
+
+    #slide-11.revealed .spotlight-beam {
+      opacity: 1;
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    .light-flash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, #ffffff 0%, #fde68a 40%, transparent 80%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    .light-flash.trigger {
+      animation: flashExplosion 1.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes flashExplosion {
+      0% { opacity: 0; transform: scale(0.4); }
+      18% { opacity: 0.95; transform: scale(1.2); }
+      100% { opacity: 0; transform: scale(2.2); }
+    }
+
+    #countdown-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.95);
+      z-index: 70;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #countdown-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .countdown-number {
+      font-size: 10rem;
+      font-weight: 900;
+      color: #fbbf24;
+      animation: countPop 0.8s infinite alternate ease-in-out;
+      text-shadow: 0 0 60px rgba(245, 158, 11, 0.8);
+    }
+    @keyframes countPop {
+      0% { transform: scale(0.8); opacity: 0.5; }
+      100% { transform: scale(1.15); opacity: 1; }
+    }
+
+    .reveal-card {
+      opacity: 0;
+      transform: scale(0.82) translateY(30px);
+      pointer-events: none;
+      transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+    }
+
+    #slide-11.revealed .reveal-card {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+
+    .reveal-trigger-wrap {
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    #slide-11.revealed .reveal-trigger-wrap {
+      opacity: 0;
+      transform: scale(0.8);
+      pointer-events: none;
+      position: absolute;
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+    }
+  </style>
+  <!-- QRCode & Real-time Cross-Device Sync -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+
+  <!-- Ambient Background -->
+  <div class="bg-grid"></div>
+  <div class="ambient-orb" style="width: 420px; height: 420px; background: #f59e0b; top: -80px; left: -80px;"></div>
+  <div class="ambient-orb" style="width: 380px; height: 380px; background: #10b981; bottom: 40px; right: -60px; animation-delay: -5s;"></div>
+
+  <!-- Cinematic Spotlight Overlay for Questions -->
+  <div id="spotlight-dimmer" class="spotlight-overlay" onclick="closeSpotlight()"></div>
+
+  <!-- Kahoot Countdown Overlay -->
+  <div id="countdown-overlay">
+    <p class="text-amber-300 text-2xl font-bold uppercase tracking-widest mb-4">Announcing the Awaited Leader...</p>
+    <div id="countdown-num" class="countdown-number font-display">3</div>
+  </div>
+
+  <!-- Light Flash & Particles -->
+  <div id="light-flash" class="light-flash"></div>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Bar -->
+  <header class="fixed top-0 left-0 right-0 z-40 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500/25 border border-amber-400/40 text-amber-400 text-sm font-bold">
+        <i class="fa-solid fa-sparkles"></i>
+      </span>
+      <span class="text-xs sm:text-sm font-semibold tracking-widest uppercase text-slate-300">
+        The Mystery Leader Challenge
+      </span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <span id="slide-counter" class="text-xs sm:text-sm font-bold px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-amber-400 font-display">
+        1 / 11
+      </span>
+      <button id="fullscreen-btn" onclick="toggleFullScreen()" title="Fullscreen"
+        class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 transition cursor-pointer">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Top Progress Line -->
+  <div class="fixed top-0 left-0 right-0 h-1 bg-slate-800 z-50">
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-400 transition-all duration-500" style="width: 9.09%;"></div>
+  </div>
+
+  <!-- MAIN SLIDES CONTAINER -->
+  <main id="slides-wrapper" class="relative w-full h-full">
+
+    <!-- SLIDE 1 -->
+    <section class="slide active" data-slide="1">
+      <div class="max-w-4xl w-full flex flex-col items-center text-center">
+        <div class="anim-item w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-slate-900/90 border-2 border-amber-400 flex items-center justify-center mb-8 mystery-pulse">
+          <i class="fa-solid fa-question text-5xl sm:text-6xl text-amber-400"></i>
+        </div>
+
+        <span class="anim-item delay-1 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs sm:text-sm font-bold tracking-widest uppercase mb-5">
+          Can you guess who he is?
+        </span>
+
+        <h1 class="anim-item delay-2 text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight mb-6">
+          Welcome everyone!
+        </h1>
+
+        <p class="anim-item delay-3 text-lg sm:text-2xl md:text-3xl text-slate-200 font-medium max-w-3xl leading-relaxed mb-10">
+          Today we will talk about a great historical leader; I hope you will be able to guess his identity!
+        </p>
+
+        <button onclick="nextSlide()"
+          class="anim-item delay-4 group px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-base sm:text-lg shadow-lg shadow-amber-500/25 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-3 cursor-pointer">
+          <span>Start Interactive Presentation</span>
+          <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="slide" data-slide="2">
+      <div class="max-w-4xl w-full">
+        <div class="anim-item flex items-center gap-3 mb-4">
+          <span class="px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-extrabold tracking-widest uppercase">
+            Clue 01 • Origins & Birth
+          </span>
+        </div>
+
+        <div class="glass-card rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="anim-item delay-1 flex-shrink-0 w-44 h-44 rounded-3xl glass-gold flex flex-col items-center justify-center text-center p-4">
+              <i class="fa-solid fa-chess-rook text-3xl text-amber-400 mb-2"></i>
+              <span class="text-xs font-bold uppercase tracking-widest text-amber-300/80">Born in</span>
+              <span class="font-display text-3xl sm:text-4xl font-black text-white mt-1">1138 AD</span>
+            </div>
+
+            <div class="flex-1 text-center md:text-left">
+              <h2 class="anim-item delay-2 text-2xl sm:text-4xl font-extrabold text-white leading-snug mb-5">
+                He was born in Tikrit Castle in Iraq in 1138 AD.
+              </h2>
+              <div class="anim-item delay-3 h-1 w-20 bg-gradient-to-r from-amber-400 to-emerald-400 rounded-full mx-auto md:mx-0 mb-5"></div>
+              <p class="anim-item delay-4 text-xl sm:text-2xl text-slate-200 font-medium leading-relaxed">
+                His father was a famous and just governor.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 -->
+    <section class="slide" data-slide="3">
+      <div class="max-w-5xl w-full">
+        <div class="anim-item flex items-center justify-between mb-4">
+          <span class="px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-extrabold tracking-widest uppercase">
+            Clue 02 • Youth & Interests
+          </span>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6 sm:p-10 mb-6">
+          <p class="anim-item delay-1 text-xl sm:text-3xl font-bold text-white leading-relaxed text-center mb-8">
+            In his youth, he loved <span class="text-amber-400">science</span>, <span class="text-emerald-400">religious studies</span>, <span class="text-amber-400">poetry</span>, <span class="text-emerald-400">literature</span>, and studying <span class="text-amber-400">the biographies of great leaders</span>.
+          </p>
+
+          <div class="anim-item delay-2 grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/80 text-center">
+              <i class="fa-solid fa-atom text-amber-400 text-xl mb-1.5"></i>
+              <p class="text-xs sm:text-sm font-bold text-slate-200">Sciences</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/80 text-center">
+              <i class="fa-solid fa-book-open text-emerald-400 text-xl mb-1.5"></i>
+              <p class="text-xs sm:text-sm font-bold text-slate-200">Religious Studies</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/80 text-center">
+              <i class="fa-solid fa-feather-pointed text-amber-400 text-xl mb-1.5"></i>
+              <p class="text-xs sm:text-sm font-bold text-slate-200">Poetry</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/80 text-center">
+              <i class="fa-solid fa-scroll text-emerald-400 text-xl mb-1.5"></i>
+              <p class="text-xs sm:text-sm font-bold text-slate-200">Literature</p>
+            </div>
+            <div class="col-span-2 sm:col-span-1 p-3.5 rounded-2xl bg-slate-900/70 border border-slate-700/80 text-center">
+              <i class="fa-solid fa-chess-knight text-amber-400 text-xl mb-1.5"></i>
+              <p class="text-xs sm:text-sm font-bold text-slate-200">Leaders' Biographies</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Question Box (Spotlight target) + Live QR & Link -->
+        <div id="q1-box" onclick="toggleSpotlight('q1-box')"
+          class="anim-item delay-3 spotlight-box question-highlight glass-gold rounded-3xl p-5 sm:p-6 flex flex-col lg:flex-row items-center justify-between gap-5 cursor-pointer">
+          <div class="flex items-center gap-4 text-center sm:text-left">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/50 flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid fa-comments text-xl text-amber-400"></i>
+            </div>
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-widest text-amber-300 block mb-1">
+                Live Interactive Question (Scan code or open link)
+              </span>
+              <h3 class="text-lg sm:text-2xl font-black text-white">
+                Does any of you like any of these hobbies?
+              </h3>
+            </div>
+          </div>
+
+          <!-- QR & Link Widget -->
+          <div onclick="event.stopPropagation()" class="flex flex-wrap sm:flex-nowrap items-center justify-center gap-4 bg-slate-950/75 border border-amber-400/30 rounded-2xl p-3">
+            <div id="qr-q1" class="bg-white p-1.5 rounded-xl flex-shrink-0"></div>
+            <div class="flex flex-col gap-2 text-left max-w-[260px]">
+              <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1">
+                <a id="link-q1" href="#vote=q1" target="_blank" class="text-[11px] text-amber-300 hover:underline truncate max-w-[175px]" dir="ltr">Loading...</a>
+                <button onclick="copyVoteUrl('q1', this)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-200 font-bold cursor-pointer">Copy</button>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="openParticipantsModal('q1')"
+                  class="flex-1 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow">
+                  <i class="fa-solid fa-users"></i>
+                  <span>View Submissions (<span id="badge-q1">0</span>)</span>
+                </button>
+                <button onclick="openVoteWindow('q1')" title="Open Voting Page"
+                  class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-amber-300 text-xs font-bold cursor-pointer">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="event.stopPropagation(); nextSlide();"
+            class="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition transform hover:scale-105 flex items-center gap-2 whitespace-nowrap cursor-pointer shadow-lg shadow-emerald-500/20">
+            <span>Next</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="slide" data-slide="4">
+      <div class="max-w-5xl w-full">
+        <div class="anim-item mb-4">
+          <span class="px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-extrabold tracking-widest uppercase">
+            Clue 03 • Rise to Leadership
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          <div class="anim-item delay-1 glass-card rounded-3xl p-8 flex flex-col justify-between border-t-4 border-amber-400">
+            <div>
+              <div class="flex items-center justify-between mb-6">
+                <span class="px-3 py-1 rounded-lg bg-amber-500/15 text-amber-400 text-xs font-bold uppercase tracking-wider">
+                  Phase 01 • The Levant
+                </span>
+                <i class="fa-solid fa-shield-halved text-2xl text-amber-400"></i>
+              </div>
+              <p class="text-xl sm:text-2xl font-bold text-white leading-relaxed">
+                He began his military career in the Levant under the command of his uncle <span class="text-amber-300">Asad al-Din Shirkuh</span>.
+              </p>
+            </div>
+          </div>
+
+          <div class="anim-item delay-2 glass-card rounded-3xl p-8 flex flex-col justify-between border-t-4 border-emerald-400">
+            <div>
+              <div class="flex items-center justify-between mb-6">
+                <span class="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                  Phase 02 • Egypt (1171 AD)
+                </span>
+                <i class="fa-solid fa-crown text-2xl text-emerald-400"></i>
+              </div>
+              <p class="text-xl sm:text-2xl font-bold text-white leading-relaxed">
+                He was sent on military campaigns to Egypt to assist its ministers and secure it, until he assumed rule in Egypt in <span class="text-emerald-300 font-black">1171</span> AD.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 -->
+    <section class="slide" data-slide="5">
+      <div class="max-w-4xl w-full text-center">
+        <div class="anim-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 text-xs sm:text-sm font-extrabold uppercase tracking-widest mb-6">
+          <i class="fa-solid fa-hand-sparkles"></i>
+          <span>Audience Poll (Live Voting)</span>
+        </div>
+
+        <h2 class="anim-item delay-1 text-3xl sm:text-5xl font-black text-white leading-tight mb-10">
+          Does anyone among you aspire to rule Egypt in the future?
+        </h2>
+
+        <div id="poll-box" class="spotlight-box">
+          <div class="anim-item delay-2 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto mb-8">
+            <button onclick="castVote('yes')"
+              class="glass-card hover:border-amber-400 rounded-3xl p-7 transition-all transform hover:scale-105 active:scale-95 flex flex-col items-center cursor-pointer group">
+              <span class="text-5xl mb-3 group-hover:scale-110 transition-transform">🙋‍♂️</span>
+              <span class="text-xl font-extrabold text-white mb-2">Yes, I wish so!</span>
+              <span id="vote-yes-count" class="px-4 py-1 rounded-full bg-amber-500/20 text-amber-300 font-display font-black text-lg">
+                0 votes
+              </span>
+            </button>
+
+            <button onclick="castVote('maybe')"
+              class="glass-card hover:border-emerald-400 rounded-3xl p-7 transition-all transform hover:scale-105 active:scale-95 flex flex-col items-center cursor-pointer group">
+              <span class="text-5xl mb-3 group-hover:scale-110 transition-transform">😂</span>
+              <span class="text-xl font-extrabold text-white mb-2">Maybe one day!</span>
+              <span id="vote-maybe-count" class="px-4 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-display font-black text-lg">
+                0 votes
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live QR & Direct Link for Slide 5 -->
+        <div class="anim-item delay-3 flex flex-wrap items-center justify-center gap-4 bg-slate-900/80 border border-emerald-400/30 rounded-2xl p-3.5 max-w-2xl mx-auto mb-4">
+          <div id="qr-q2" class="bg-white p-1.5 rounded-xl flex-shrink-0"></div>
+          <div class="flex flex-col gap-2 text-left flex-1 min-w-[220px]">
+            <span class="text-xs font-bold text-emerald-300"><i class="fa-solid fa-qrcode mr-1"></i> Scan the code or open the link to vote:</span>
+            <div class="flex items-center gap-2 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5">
+              <a id="link-q2" href="#vote=q2" target="_blank" class="text-xs text-amber-300 hover:underline truncate flex-1" dir="ltr">Loading...</a>
+              <button onclick="copyVoteUrl('q2', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-bold cursor-pointer">Copy Link</button>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="openParticipantsModal('q2')"
+                class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition flex items-center gap-1.5 cursor-pointer shadow">
+                <i class="fa-solid fa-users"></i>
+                <span>View Participants (<span id="badge-q2">0</span>)</span>
+              </button>
+              <button onclick="openVoteWindow('q2')"
+                class="px-3 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 text-xs font-bold cursor-pointer">
+                <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Open Voting Page
+              </button>
+              <button onclick="toggleSpotlight('poll-box')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-400/40 text-amber-300 text-xs font-bold transition cursor-pointer">
+                <i class="fa-solid fa-lightbulb mr-1"></i> Spotlight
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6 -->
+    <section class="slide" data-slide="6">
+      <div class="max-w-5xl w-full text-center">
+        <span class="anim-item inline-block px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-extrabold tracking-widest uppercase mb-4">
+          Clue 04 • Unity & Strength
+        </span>
+
+        <h2 class="anim-item delay-1 text-2xl sm:text-4xl font-extrabold text-white max-w-3xl mx-auto leading-snug mb-8">
+          He succeeded in uniting Egypt, the Levant, Syria, Iraq, and Yemen. (Click cards to reveal flags!)
+        </h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-5 mb-8">
+          <div class="region-node glass-card rounded-3xl p-5 flex flex-col items-center justify-center cursor-pointer transition transform hover:scale-105" data-region="0" onclick="toggleFlag(this)">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-display font-black text-base mb-2">01</div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white mb-1">Egypt</h3>
+            <div class="flag-container text-3xl h-10 flex items-center justify-center transition-all duration-300 transform scale-0 opacity-0">🇪🇬</div>
+          </div>
+          <div class="region-node glass-card rounded-3xl p-5 flex flex-col items-center justify-center cursor-pointer transition transform hover:scale-105" data-region="1" onclick="toggleFlag(this)">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-display font-black text-base mb-2">02</div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white mb-1">The Levant</h3>
+            <div class="flag-container text-3xl h-10 flex items-center justify-center transition-all duration-300 transform scale-0 opacity-0">🇵🇸</div>
+          </div>
+          <div class="region-node glass-card rounded-3xl p-5 flex flex-col items-center justify-center cursor-pointer transition transform hover:scale-105" data-region="2" onclick="toggleFlag(this)">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-display font-black text-base mb-2">03</div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white mb-1">Syria</h3>
+            <div class="flag-container text-3xl h-10 flex items-center justify-center transition-all duration-300 transform scale-0 opacity-0">🇸🇾</div>
+          </div>
+          <div class="region-node glass-card rounded-3xl p-5 flex flex-col items-center justify-center cursor-pointer transition transform hover:scale-105" data-region="3" onclick="toggleFlag(this)">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-display font-black text-base mb-2">04</div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white mb-1">Iraq</h3>
+            <div class="flag-container text-3xl h-10 flex items-center justify-center transition-all duration-300 transform scale-0 opacity-0">🇮🇶</div>
+          </div>
+          <div class="col-span-2 sm:col-span-1 region-node glass-card rounded-3xl p-5 flex flex-col items-center justify-center cursor-pointer transition transform hover:scale-105" data-region="4" onclick="toggleFlag(this)">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-display font-black text-base mb-2">05</div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white mb-1">Yemen</h3>
+            <div class="flag-container text-3xl h-10 flex items-center justify-center transition-all duration-300 transform scale-0 opacity-0">🇾🇪</div>
+          </div>
+        </div>
+
+        <button onclick="replayRegions()" class="anim-item delay-3 text-xs font-bold uppercase tracking-widest text-amber-400 hover:text-amber-300 cursor-pointer">
+          <i class="fa-solid fa-rotate-right mr-1"></i> Replay Regions Unification Sequence
+        </button>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 -->
+    <section class="slide" data-slide="7">
+      <div class="max-w-5xl w-full">
+        <div class="anim-item mb-4">
+          <span class="px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-extrabold tracking-widest uppercase">
+            Clue 05 • Morals & Humanity
+          </span>
+        </div>
+
+        <div class="anim-item delay-1 glass-card rounded-3xl p-6 sm:p-8 mb-6 text-center">
+          <p class="text-xl sm:text-2xl font-bold text-white leading-relaxed">
+            He cared about building schools and established hospitals to treat the poor for free, and was known for extreme justice and asceticism.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="anim-item delay-2 glass-card rounded-2xl p-6 border-b-4 border-amber-400">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-2xl mb-4">
+              <i class="fa-solid fa-school"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-white mb-1">Schools</h3>
+            <p class="text-sm text-slate-300">Building centers of education and spreading knowledge.</p>
+          </div>
+
+          <div class="anim-item delay-3 glass-card rounded-2xl p-6 border-b-4 border-emerald-400">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-2xl mb-4">
+              <i class="fa-solid fa-hospital"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-white mb-1">Free Hospitals</h3>
+            <p class="text-sm text-slate-300">Treating the needy and the sick at no cost.</p>
+          </div>
+
+          <div class="anim-item delay-4 glass-card rounded-2xl p-6 border-b-4 border-amber-400">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-2xl mb-4">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-white mb-1">Absolute Justice</h3>
+            <p class="text-sm text-slate-300">Fairness and mercy for all his subjects.</p>
+          </div>
+
+          <div class="anim-item delay-5 glass-card rounded-2xl p-6 border-b-4 border-emerald-400">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-2xl mb-4">
+              <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-white mb-1">Asceticism</h3>
+            <p class="text-sm text-slate-300">Living modestly and distributing wealth to the needy.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8 -->
+    <section class="slide" data-slide="8">
+      <div class="max-w-4xl w-full text-center">
+        <span class="anim-item inline-block px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-extrabold tracking-widest uppercase mb-6">
+          Clue 06 • Greatest Triumph
+        </span>
+
+        <div class="anim-item delay-1 glass-gold rounded-3xl p-10 sm:p-14">
+          <div class="font-display text-6xl sm:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-emerald-400 mb-6 tracking-tight">
+            1187 AD
+          </div>
+          <div class="w-24 h-1.5 bg-amber-400 rounded-full mx-auto mb-8"></div>
+          <p class="anim-item delay-2 text-2xl sm:text-3xl font-extrabold text-white leading-snug max-w-2xl mx-auto">
+            Among his greatest victories was the liberation of Noble Jerusalem in 1187 AD (the Battle of Hattin and beyond).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9 -->
+    <section class="slide" data-slide="9">
+      <div class="max-w-4xl w-full text-center">
+        <span class="anim-item inline-block px-3.5 py-1 rounded-full bg-slate-700/70 text-slate-300 text-xs font-extrabold tracking-widest uppercase mb-6">
+          Clue 07 • Conclusion & Death
+        </span>
+
+        <div class="anim-item delay-1 glass-card rounded-3xl p-8 sm:p-12">
+          <i class="fa-solid fa-hourglass-end text-4xl text-amber-400 mb-6"></i>
+          <p class="text-2xl sm:text-3xl font-bold text-white leading-relaxed mb-8">
+            He passed away in Damascus in <span class="text-amber-400">589 AH</span>, corresponding to <span class="text-emerald-400">March 4, 1193 AD</span>.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700">
+              <span class="text-xs font-bold uppercase tracking-widest text-amber-400 block mb-1">Hijri Calendar</span>
+              <span class="font-display text-2xl font-black text-white">589 AH</span>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700">
+              <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 block mb-1">Gregorian Calendar</span>
+              <span class="font-display text-2xl font-black text-white">March 4, 1193</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10 (GUESS THE LEADER & CORRECT GUESSERS CHECKER) -->
+    <section class="slide" data-slide="10">
+      <div class="max-w-4xl w-full flex flex-col items-center text-center">
+        <div class="relative w-36 h-36 flex items-center justify-center mb-6">
+          <div class="radar-ring"></div>
+          <div class="radar-ring"></div>
+          <div class="relative z-10 w-24 h-24 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-2xl shadow-amber-500/40">
+            <i class="fa-solid fa-question text-4xl text-slate-950"></i>
+          </div>
+        </div>
+
+        <span class="anim-item text-amber-400 text-xs sm:text-sm font-extrabold uppercase tracking-widest mb-2">
+          Final Guess Challenge
+        </span>
+
+        <h2 class="anim-item delay-1 text-2xl sm:text-4xl font-black text-white leading-tight mb-4">
+          Who is this legendary leader? Scan & Guess!
+        </h2>
+
+        <!-- Live QR & Direct Link for Slide 10 Guessing -->
+        <div class="anim-item delay-2 flex flex-wrap items-center justify-center gap-4 bg-slate-900/90 border border-amber-400/40 rounded-2xl p-4 max-w-xl mx-auto mb-4">
+          <div id="qr-q10" class="bg-white p-1.5 rounded-xl flex-shrink-0"></div>
+          <div class="flex flex-col gap-2 text-left flex-1 min-w-[220px]">
+            <span class="text-xs font-bold text-amber-300"><i class="fa-solid fa-qrcode mr-1"></i> Scan or open link to submit your guess:</span>
+            <div class="flex items-center gap-2 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5">
+              <a id="link-q10" href="#vote=q10" target="_blank" class="text-xs text-amber-300 hover:underline truncate flex-1" dir="ltr">Loading...</a>
+              <button onclick="copyVoteUrl('q10', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-bold cursor-pointer">Copy</button>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="openParticipantsModal('q10')"
+                class="flex-1 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow">
+                <i class="fa-solid fa-award"></i>
+                <span>View Correct Guessers (<span id="badge-q10">0</span>)</span>
+              </button>
+              <button onclick="openVoteWindow('q10')" title="Open Guess Page"
+                class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-amber-300 text-xs font-bold cursor-pointer">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="nextSlide()"
+          class="anim-item delay-3 px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-amber-400/50 text-amber-300 font-bold text-sm transition cursor-pointer">
+          Proceed to Grand Reveal <i class="fa-solid fa-arrow-right ml-2"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: KAHOOT-STYLE GRAND REVEAL WITH EMBEDDED USER IMAGE -->
+    <section id="slide-11" class="slide" data-slide="11">
+      <div class="spotlight-beam"></div>
+
+      <!-- Stage 1: Suspense Trigger -->
+      <div class="reveal-trigger-wrap z-20 flex flex-col items-center text-center max-w-2xl">
+        <p class="text-slate-400 text-sm sm:text-base font-bold uppercase tracking-widest mb-6 animate-pulse">
+          Are you ready for the result announcement like Kahoot games?
+        </p>
+        <button id="reveal-btn" onclick="startKahootReveal()"
+          class="px-10 py-6 rounded-3xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 text-slate-950 font-display font-black text-xl sm:text-2xl tracking-wide shadow-[0_0_50px_rgba(245,158,11,0.65)] hover:shadow-[0_0_80px_rgba(245,158,11,0.95)] transition-all transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-3">
+          <span>💡 Reveal the Leader's Name in Suspense Mode</span>
+        </button>
+      </div>
+
+      <!-- Stage 2: Illuminated Grand Reveal with User Uploaded Image -->
+      <div class="reveal-card z-20 max-w-3xl w-full">
+        <div class="rounded-3xl p-6 sm:p-10 text-center bg-slate-900/90 backdrop-blur-xl border-2 border-amber-400 shadow-[0_0_90px_rgba(245,158,11,0.35)]">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 border border-amber-300/50 text-amber-300 text-xs font-extrabold uppercase tracking-widest mb-4">
+            <i class="fa-solid fa-crown"></i>
+            <span>The Great Historical Leader Is</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-2 drop-shadow-[0_4px_24px_rgba(251,191,36,0.45)]">
+            Salah ad-Din Al-Ayyubi
+          </h1>
+
+          <div class="font-display text-xl sm:text-2xl font-extrabold text-amber-400 mb-4">
+            (Saladin)
+          </div>
+
+          <!-- User Uploaded Saladin Portrait embedded via Base64 -->
+          <div class="relative w-full h-40 sm:h-52 rounded-2xl overflow-hidden mb-5 border border-amber-400/30 shadow-inner bg-slate-950">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent z-10"></div>
+            <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANEg0QDQ0QEA0REBYNFwoKDQ8PEA0WFREWFhURExMYHSggGBolGxMTITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NFQ0NFSsZFRkrKy0rKysrLTcrNystKys3Ny0tNys3Ny0rLSstNzcrLTc3Ny03Ny0tLTctLTctLTc3K//AABEIAfUB4AMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAAAQIDBAUGBwj/xAA8EAACAgIBAgYCAQMCBAMJAQEBAgADBBIRBSIGEyEyQlIxYkEUI4JRcgcVU2EzQ9IkY3FzgZKissLDFv/EABkBAQEBAQEBAAAAAAAAAAAAAAACAQMEBf/EACIRAQEAAgICAwEBAQEAAAAAAAABAhEDIRIxIjJBE0JRcf/aAAwDAQACEQMRAD8A8riCLEEpzLEMWEAhCEAhCEAhCEAhCEAhCEAhCEAj4RYUSMkkSAyEIQk+EIQoQhCGGQj4QwyEfCAyLxHQhRRCEISIRIQCEIQoQhCAyPjI+EiEIQoyPjI+ElhCE0EaY6NMBsIQgEfGR8AjI+MgPhCEAhCEBkQRYgmBYQhAIQhAIQhAIQhAIQhAI+Mj4CGAgYCGnQiQhhYkWJNUIRYQEhFhMBCEISIQhAOIkcREgJCLCFCBiAyWgBu0+nPy+s0QR03uneFLsim25LaQtZ1KWWau0w7EKkg/kTA2EIQEMBEIgBxAdCEIDIvEURYBFiReICRYARRDCQjo2awkaWA5EfIXECQHmLG1DiPgJCKYhEBkI+EAhFhAjhCEwEIQgEIQgEIQgEIQgEIQgEfGR8BkfCLDREixIYWEITQQhCARpjowiAAx4iARQYBCOhAIQiGGEhAmENAEko9COTwPtIwJZxqy2xHBBGndCno3hHHqfpWcGVS3q4aeb21lmCoCSTqFX5TtOnZVmLhWUqyLXb2hrF2fic107HsDAgA2KC481kVuJIzsvEelmrsUqw/KtIuJtdUDXVJcxJZewu3aziYs0HEOIQhIiRYkNEWEIYURwjIogOhCBMBI2EJoIAQigQEgDzFIjQIDiIkUCO4gJCLCAkIsSBDCEJgIQhAIQhAIQhAIQhAIQiiAkfACLDSRYhEUCGCEIQCEITQQhHQGwjoQGwhCAQhCAQhCAERAIs1+mdEe3Q2hq6m7g6rszQKWHhvb6gEKPQvrsrH5L+zTWz8emo111ghQoZmY7MxnQhVXytWrqoqGgW4/q3dMq/HS5krxbTffa2pqqrdVUfq0xSB8O16y4KhQBwjsiu4kteDfRYaHRQ35CbIzMPs1u31luzpGSlZRaLr6/Tmyut7FUr7qtovVMA5L13L5NZCamhA9VSiv/wAr7MzTBknFfi2xlCoDo6s0yM2kK3bzqRyNp1XT8NzWbbFHlhtQ1dibKPisweuFSEHBDqSgVm2XSEsmNjo2a06EIohghFEWA2EfxCAQhDiAQhCAkcI2KJoIARYQACEIQEhCEAjTHRpgRQhCYCO4jY+A2EIQ0kIQhgj4yPgEIQhRYRojpoIQhCRCOhDDYQhAdCEIBCEIaQxIoiwGwjoQGx9aliAoJJ/CrFrrLEADkmbFeOtCMGbmxgCFraAnTq0x2RiqW2DuK2HsaS9R6vksSDemvHomN7KpmWtzyzclSdS3O2xjOeeQoA/11k7UZZYW5IJJ/JZj3NOs8OVmlanDCu2+uxjZ8qq19qq37Ms5MnQEf6jWa3Qs85Wi2/3NAayjfRva0wekYGddXWtmRbyoAcas7Ii/Glavb5kwfEeWbR5fAVbQLzfaNnVvjNE5Vd1XOVkPRwvoiDy8ek69vlNt3N+zTCsG3lLkUs1zJwi0N26arrd/8zb4t26yRe8M4qPjs+Rjo1Sk8JfY7KrduzKu0w+r14l3KY+6lmOuM9myUt+tvuZf1ZZq5PRrVWqw41aseOMZbe2o9uzfszLMbq+Owsx6zaDwnDP5eun6s3y+uyyhy7gqWDDhgSDGzW6nhgBragTWG1LLMviakgEUDiOA4igTQgEXiKBAiGDiJFjYaIohCAsSEICQEICaCLEiwCEIQCJFiQDiJHRIEEIQmAhCEAhCEAhCEAj4yPgEIQhoiwhNYIQhAdCNhDDoQhAIQhAbHReIQ0kIsIBAAkgAckniLNLCrFPD2c8n00X3qIEBpFRUflj3GFrE8njViAoZj/H11lqtVvZBYWLs3GtKozcSjm45RwASKyocI1nmMo+rN8W7fbJUiLD1BPJPy4lrGCFTywQH02+TCJjVh1YooIUbM7NHW0lipBHDEKEVf4/ZvisgV7DWeQoJ/Zu7YzNeuykmxCQp7dkM6bVcbhKrQLW7vMavt+Oqq0fjeHMl1eykDyQvNlz9qL9laFLPhjqYevi8FqFbV193lfVpa/priKkqysYV2vwGXttp+v7ayDoATDsy68j0ptrRS1ASzYeasV/Dws5zKmc4hJoBWvVlft2/xhLWsy6/JFmYxuyqm1OXZY9uP+qqs5vL6+b24oqFdZb2ovaw+qr8ZJ4tHFaU0ACocuzIdkb/ACmP0vp4AZtlVl7tXbXcQOl6dSb/AOoKsFOhLIzdrCcxkUGtiD/PqJvYWg2JY7FeAnGqt9lZpUyVNw4cgt+EdW2VxLGTCID/AK//AFWLNSIROYcwEiRYQCEIQCEWEBsUQhNBCEIBCEIBCEIATEJimMMCKEITAQhCARYR0KNhHQgII6JFhhIoEICGACBEURZrCARYgiw02KBAekcDxDCQikwgEXiJHQDiHEOYcw0h9ICKRzJ+n4pucD8KPUt9RAfiKFBsbhuGChFbuYSXLsRizn0B+O2zKImTrwoVSF/J2XulG9gSABwB3H6sZCkwsVbGLqdSpUatqynXtbaNxKza4QFif4XV2ZpDYWJJP5MuY1zqjBiFUgqGXdW/VtpIl6nS1LtWyVrYR6rS23212XbWVKy9ZUMGBPx7NWl2lSw1JVlLAnZl7gq+37Ku3d2y/wBM6M+UXWsixFUuUtX/AMIQLWR4cBTFNBsNl40V7LK1Rn+qx1mLdZU5suvrxlIrs+SLbOg6X4erxynmZlFbfkKlj2NT7vq0tYePiOXxt6WZ22C5K5qrbCnP9O6dWb7aSa7lZqEOTjWbK67SezLFmRm45uC4q1O2uNX22ir6r8f2mn0vpSVnqLFEqrqvVVpxK7O466/Kc/4R6dXl5HU/zWqrquN/2stZW2aEpOsYtmNXTbUCK7UG1TBG+Wyyn1HHrvrbMoqRVbtuxqw6+Q32WdD1ulla3TPAFRWh8NV8vzQqt/dqb2tObzb7KbDZWXVXQq7MtdiwMywBvVeQAdRrLnSCW8xSoNgXkLZ2pb+rTHezjkKpXgBdl3VlPyktFxK8glwDwVX3KJuw/qOMF1sTnRiVKN7kMoE8ToQVala22LseO4a/bW1W+3x1nP21lCyt6EHWUk2APMIoHE0AhFEICRYkWAQhCAkIQmghCEBeIcQ5hzAWNjo2AGMMcYyBEIsI4TGmwhCGCPjI+AQhCAohAQgEUCAjoCQiwmsJCEWGgCEcBFhhmsWLEgLCEICR0bHQ0TWwlFdTlmILdoSoOzv+rN8VmZUoYgEE/IKq7M00vMDKxa0Vg9poo9zf5fb9VmEVc2wKWDBUUjXVW2Zvq0omxR+ATxJ8kVqqlQS5fXb3MwkJYFiVBVD8W7tR8pFdDku5IIr5YfjZtZPRTaedeBz+d2Rl4+S+2TdOxq7mBttWtQ2otsDsqjVo7Catq3LgWWgaor2aqh+TftIDaMC1vRTWgHqHazVVP+7WaGTZlli+QtrPYoXatvLa1fj5SyZOlVhaK8Y3WZlp2LM2tDfZVXXZv2saagpvD5BqAvbQIufRb5iYx+q266qspKv0jqD4xQVVX1/6LZj0XPzNivGybmOSy599v8tZjIrMP1dW7ZAmaMWpVvtuZguti9KVK1b6+bkdzRcPLzblAx6av6dvQeXmurN9l2d+5oUl8LYmTZo3FodXyLz5ln91h5qr3TL8DcjKzW2sWrnSxkr8z3Wt3f4r8pfo6yKOSotVqvMrKsPNZPMtZmZrVXVpF/w+UUtm2WswLWVUNT7fdUzbNCUXiBq0stuxrsprBkvsqdyNX9pi9XIsLWY5C0g6mnP8tcj2/qvdOgvo4syLxh12KTYz7WPpxs05zJwDYrXVgeWXCBqLXVkP1Wpm/X3K0DJvpdvVQzIBsWrb2iSjJKooVQGJ9H21ZRtIrMRyCSUcD7f23WQBinIZGXj8M67awNTCymK8MWPDDVbF7UP1Zvivy2kPUKy3NxBIZuC7LrsZJh2FwQQH57S9XuX9WX3S1m03BBW5DVr6jXRWUSoMXiAHEWEtIhCEBOIcRYQGwjo3iAkIsIBCKBxFgEI2EAiQhAI0iOgRAgjhGxwmBYQhChCEIBCEIYIsSKPWGCPjI+AkWJEJmh0IkQGBIDAmNBikwwkIoESAoixBFgJHRsegLEAfknUQ1f6Zis6uVJViNhYo2VAsZk2EHlgyIAHC2Kmz/s31X5TYxAtK2i0slahe1l7m7l+P12mI7BWZyGs5YsfMbtaSuEw8RrzwD/2CbdzGD4aq6hmADPwGrOzKP+rrG43UAvBUEHhwHQ96ll1VtoZpIFLqASyal7G7lPybX49shqcYD2Opq4VXYov7Bfc1qwxsXhwHtUgMEL1VpYzn4+Uu3dK1uUXFZYkqq+QGrHlqo+X7SXGZ1LWL5dbAFQ9gdvT9W+LSRvvkWG4jVzYeKDjJZs7fZrbZWy+os9YqewtYLgoRbNatdfbUvt93btMy/FtrBd6nVWX0yaLJoZ2dRWK6skM2TT6WWKqIrBVXyqqpSWkKaaGxjXhObLBuqPa+txXbaYPiXq5yXUMaww9FrxK0rRJX6f117n2yrizrxq9u7Kw+suZuLU2TjGtqQlpDlmtRak7l+Swp3GPcRjV4IyDRVj0h77k0st7vj2yC2hXXEuptryab+FZ7aEW8nuVbZDQacS5MjHtpbDDii5qLO1a7GXbt22aWM7Dpyb6hRVYvTV4qreqrWvLfubt2b7N2pCWR0zxEMbIuqIU1Whayql7Kl/b6tKvWemcM4rWmsqS5eu3ZHX5NUuurdzTBzWtbJuNJC8NqEVe1B8V/VZpJ1MGypcjgVgbFUXVGPxgR20GpalYHW1dzYx1Zk+LMvyXZdZVdCu4JQg+qrWz6t+yttNDq+j5GVZjbtSFLlrG2aoTGsYhOGPZ+Qi9qt9mX6wpLVig8lianI5DVnVlP7L8llurMLL/dY8n0/rFrfVvtVasoAqfLCD1A2PmNttNTEIWoldg4cv8A0zLsjD266/L3QMkjgkfnj5faNk2aoUqFDLyAxSwaspkIM6uZIsSLAcIQEIDYkUmJAIReI6AyEWEBIhEWHHMAhCEBCIhEdEIgVoQhMD4QhChCEIDIvEURYYAI4CAEcBDBGRTAwFhGwmghCKBABHQEIYdzCNhAdCIIsBJPjjjlmICjtLNIBLgVlrDAIQR6o6yWtCympg5ItdtfM1TuVR8u7bZW2mI9hHLkEeuoX4rJf6h9nZCyq3qamXVV/bb26yr1DJ83gAooAClVXtYzHQAg8FbAzHtKt2qh27e75QHqdGAQA8Gxu5lP2Zfrt2yoKweOWBA/CqPbLBBPJUOSfyy9u0kXc8IroFICFUU7K+qHX67bTR6Y1dJfXH8xkrcpk7OyO/2WqYlSuWXmp2ckAbWazTswb67ji5GKVuqHJVciErtYsSmvJZmavLNmIa727lMudYqps8u7JrcWkjHa6ylKqlHlKqWr8maVsbpT3DQY9jD3BHyJvYHhW5/Ruk2WVr+FXPRWgS9GxKyDiZFxwsi1g4SupGru7dVbHt/ZfjMrxH4OUBWXKxmFeTXRZjVUpTkILWXuZZ13S/Cy08c9EzxqdlVc+uxFMM3wtih673p6orI6OVya67E7fizwpzfinwviV4mRdUK1Ay/L+rou0zbOi30Y6WLZkq1eOM9Fex9PcunbOg8QY1RxKtyxW/ILt8mVvKs0Vfj8ljMi7IyVRLbKzQuMMdXezyFY2e1Wt/XXXVlhjjsPGzG82+/p9lqsPPaxy9bNt8pNf0XPu2CrWqshvFddm+4X47fadL0tbsexMjIqfIZU0VK7a7tvr+qrMzP6qyXW2OcmtOSwpXev3f8AlQxj42YbOa0rNFIQuXVXXYarsuv12XaVcgBQEDgqDuWb3Ode1tZpHqArWkhWataTRYqWbI4Zu5fssr2Xea6EJUy1AIWoXst19qq0KUQwXYj8g67fLn5S7gXHlOWs5HaHVdtW+K+6VLSHNpPYAxJRvidm7dfjJsTIKFgFDVt6Hb5D7fq3ygL1PJNzliWLfy7mVRLOeoV3AIP87Ke2VROk9OVOEdGiOmtEaY6EBkIQgLzHRkICkwJgREgEURwiiAhHEZHkxkAhCECrCEJgfCEIUZHwhAIsSLDCiPjBHA8ww0xIEQ4gEIQmhRHARIsAhCEMEIQgKIsBFgIAT6AckzoulYjujhACD6G512VPqtS/L3e5pk9Oy66fONmOLy1JRV51ZH+Nsnfq7VY9SMzVLrqVr/8AFyfs36zGqwz68XISy2r+pCnY417drzOzGU2OyKAjMXCVh9UDN7ZVZiSzVUkBV2Ox3bj5MzSm+U7fyf8A4LOamqGI/Ckf7m1jhcRySAP9zJMQkn8kmPqrLHhQSxlKbN7GwACytCCCGax9pZ6dktSXZsqlrGHq9xeyW+neGKQgsynI/wBK5pYS9OrZQuH5n+rWSW6RYXiO5G5TIwx/p5m863p3jXMA7bek/wCWS9czcavpF6EtiorA/wCTCWj4a6U5UJUslvi6/A8c5tnq2PhsP/cZtX/rlzN8S5OSl1P9A9PNNlgyWtrsr7VnE3+BOn2ECtWrmf0roz4WR1NMa9iq4YTWzuZhZaqsspmtN2ynGU9NKD+7dUrVWXl1TGvW7a1pp9MGHX/UNkXYpotusNbZLIysV1/xVpTza1a/GCY9lNOPZfQH92rWMqtkd37NKXinCycEYFHS6q+VpNlq311utpZ/c20MbXUMXpNw4U4hb+GxrErech1PpVYJCNYtfHxsexV/xaYXVKc9vXI6TQf9XxqUr/8A1mJ/zDyyQarqSPir2awaq/k47K1gUIQPjr5ewlYgqFZq9QDqFVu3/cqyL/me/ANobj8LYqK0mosZyNgAB9TsrQxBXqwYKQTzt2Ns3MlJJA1H4/KqdWYxbbMVlIRbBkh/VmbVWSQIxHqCSfqx7oas2WGwB2CAgBAqDVmkAHEm8xGLkAjkbFW7mQyKdIj9OEZHxk1ghCEAhF4hxASPEAIoEBQOYhEeIh9YDCYExSIwjiARIsSAQhCBVhCEwPhCEKII4RojoSIQhAIQhMD4kISgQhFEAhFEDASEIohg4gBHCEAEICEBt1hVSVALfwrSrjUkMxsGxA22f4maFVYb8gk+0KvuYzT6ZgYwsx1y7WKsvLrQu2n1qk1UPwr8avGywgZsq3D8s+Z8Wa1WdlnECng8czp8ylFL2qXWn1QOq7K5+sxsfGLEkjgCQtDjYZcgAc8zcwsVaCGPrx6lppdL6YOGKgECW7QKVZkUW1spWytldVX690O2tRz2XZdkvopJOxAVVjLOlZKcEkK4+LWIrN/jtNBhkZHIx6fIqX0N4kmN4T86sa2pZkberWWuisPrN3EWVz4zLKyQTyf5VpaTrJHAJII7gymbh8C2Cty+PYrLy+/mI2366ziraHVirKQR2mYzVdt0fxqUGtpYsvteb3hK4Z111zMFrtvrQ/bWpWZrZ5liY7s4rVTuTqK+O5zt2qqz3PG6YOj4iooQXVUigvZW9jXX5Hc9Sr8u2DfSNLrLMzIwrbrRhr2im8pY1/bslq2/WS+MerrhZFRv4Nn9InCpG9cycnGXEK01jNyqRXaz+1TV7aatW1Wycv8A8aksF2Bf8bMMQme1u3xmAqsQAQNikzqPFVT6jIpSwnlmdl9onnHnlvQn0/Zu2aON0y+1S9YZkH5etkaF+Tpc/BwM3ZqlNFn8TjOo49mI5rLHkdwZTNMVvWeGPBHxuV1lXrSEhCfUhYPcVE6gfXdQefQsva0s1XbcaHb9WbVlmSRERiCCCQZqHY9PpGUy1qUW1u7zLrErRQqtKvHHIHqAdQ32mViXBuAw55mmDKiTwIwiSAxDKSjhFgDAcBFAiiLAQCLE5ibQHQhGgwH8RpEUGIYEcIQgJCPhApQhCYHwiiEKJFhDniAQhCEgmAMQiKBAI6EXiaEiiEIBCEICj0igRsfDCgQIjQYsBQYkQGLAf5gVSASCRyde3X6yTo4JuqJJCrYhLfXuXujTWg1Nh9P4VW1ZhL1eQuMKbnw/MrassPNZ1809392Rfs6fjR8TWKtOcFIaoZ6ujM3cpZWa3t/ac1j8AgsPU/KL5YuqstNj7K6qa2XtXZW/us2327ZCg4ZR/H8SWz27vw0SAOADyZ1lGAt4YPwqt2ny11acD4ezyo4YgETtelZYB5UgiQ9H4s29M/pV5QeZUPXVlkYxMO8baBWb50sk18bKJ5P5EqZPSKr2JUFbD3bVtqs0+TOy+m4yKTblWsv1Wzy5n4nhNcoPfbUcagHZavkwnS4XSsfF1a0m+weo8/2pM/xD1Gy8MASKxG291k+BenUHPy8pl7MSs3qn2ea/iDqNl2TmYxRmRcY10t2VtbfYq9yzjunddbpuVXYp4qZhXYnxeudl1/p1f/t2SttO791t9tr7Uitl1tpqlOGftz/TuoCmvIC1WLSFVlW0PZa2VUysq/Xb3LNLxmD1nBqChFNDretnx8tlkqZBzBbmFuMW2kCrNfuyMQV9rt5P2dvrLpNi0PYKhYzmthjLXq9WNUra2tV9mbZoTPbzXC8GWKgsahL2Dc+XXb7hC/w1kVr/AFGOGxLCzuytZ5dSV/FE+TNO5AxLgHVnrY9xWttVjDiYa7MxazkHhLG2VjJdf5xwHTupXZPFVuObrB6ixFTZpZ6r00sujVGtyCRUx2dR9mnW4nQKBy7Lark7B64uX0+qlXKh2Y+hez3KJTdR5Bk0gBeD6g6n0lzpOGti3h/yE2Gw/mM6rTpZaB6AN6L/ANtmj8ZXCqyAlT6lpTh+mV4ZVyD6AHktL4kuXWFYjhlPuK2Ns0jAJ9JsYcDFihYESkmwik8QB5gAhAHmITAXmJGxwgLE4jgI7iA0CLFA4hAYRIxJSOY0CAoECI4CBEDPjhAxZihCNiiAhMdCEBYQiAwwRYkWGHwhCAc8whATQsIQgAEUCKIQCEIQACAEBFB4gXKmrr5JIsZqShVhr5R7tZpWKblxK7WsDccVLZW7IyWN2rU05tOWcAc88lQyjbUTez+rkDAFpAGKmqNR7m7tlnO+1KfVwmNtSlqN5jh7G11ap62ZfKmUjdyA/gk8t9ZHfcLLGLc/3GLFtu5e5oAlWHA5B+U1TTxrijcg8KZ1/Rs/+DOGobngk/kek1+lZRV+CeCAQVnN3wr0HGzwODyeBNevPTUlSOR2nVu5p5tmZD9urMApJ12903egOzKAx5J7hC3Suxfkk+pmF13OShGLEb+0Vq0tdd60mKnC+tx7Qizh8e5BcLs0s1gPIRm7VjTNszqu9pZjW4A9e5XWeo9D6jT1WnFsFIFlT1qflrbXV3K31rdVWY2Tl0ZOiDUq0q9Iejo+VbVda1WHlIGW+tfMauyv9ZTlnHVdOwP+WV2ZlqmlByyNYUb/AOVUq/7pB4eziQtjOS9pLm5m2Zz8laZ3V1Oe4stdq8NVFFOJ8kr/AOrr9mlHoFgxrXxnPKHuSz7fWSYYu0yOi493LrUFsPqUrbWOwOmYyHkVFmHafNaRpkFR6+pA5DK0h6j1ALrYCA3IU6iHTTWvuA5HPA/nb5Tl+t5YBYE+ktdR6jxwQZxPiPqJAYAgExPZ1HJdVAfzWA9A/G00+iYqtXj+abCzW6BK12Zavk0zb+BWKx6PYyuPr8pe6flFRSlTCvKHNBVV9wZWX3fbVtZ0ebaXreQLsi11ACghAqnZVCyBFg9BqZ0dSjKSpRvcpjk9JaC8RCJJzGEwIiIkcRACA0iBEcRAiA0iAikRAIDgYEwAgRAWESEAhCEA54gTGkxIFQxYhizFGx0bHQCEIQCMj42GHARwEQCPAhhYQhAbFAiwmgAi8Q4iwCEIQCAgIQFAgRAQgWMKksH2tWurlEZmbuYNau0r9Tw0S1hWxNYYhXc/t2tLWJQjbFzwpGuq+5jN7x30irGp6dYLVa29Xd0//JJzvtTA8RtXZlZD12oyLwBZUNUY+UuzLMisgn0PJA9sjtBUKoPPI2+qqJZwKQFYsCCzBA7e3jbulBlXPKhf49TNKiwhuR+SOTKoXusdQShBTZfbFxgbbFCk6ntLL8VhcrobF3TZRxz2mbWPcaKkK8mxvQIswK8tSrlQAu2wVlkuJ18q4crwwGo/X9lWQ776dZidKqp1yc9hZYO4Uq2yzh/HNYvuL0AEH8pX8f1jczq7WqlbsSobdmVtmaWbctArBQEYkKERe2pPiu0pyvI4/GybKSASw4M6/H6vTkLX/UAM6NKGbgC6suFVFH4nMpS/ICggntm6TOR2vWfFxbhEE0a+m3pj4+W5DFvqrqyTlumdEDFN2ClgeHY9qt3azrvD3XzSjY9/DVEOhk6q8OTt0+BmG+kEkFh6FZzmZkPbctYBKodzHYV3kXMittS3crQssI/qHUDkvrtIeg3rHU+NjzyZxefkFm5YkkHmaGfk8khjzwdpjkE7H88iXHn5KbaxdhoDsg2DL8RtNWrpRuKXKra2twNW7kb6s3xbbumTjuAWCkgt2hll/p2e9dOVSthUu6HVflKedez6FRyq2mxlAV7mbZWs+WrfJfjtK/HEkoXkA/n+JIK5ogiS2a5Ea+Joi4iheI7jiLAYVjSJKSBIzAZxACOhAUCBEUQhKMiBjjAwoyKYkIDSImsfCBRI5iwhMUZCEISckcIwCSCAcQAjhFEBAOIQhxAWEBCAogREjhNBCEIBCEIAIRRHQGxwBPAAJJOoVflFAlzp2OWJcEgqQ40XZl/b6qsBfEtL4JShWpYhNmuxG8xW29tUyc2tl4LkhyoAVzsyjXtnU/8AEGnGxHqTANhuHFlj+5Jxl7lnU2HksC2zDbYyFEvIIQAgsq8FfrJKGcpwCNQSo1Mp5Kkeo9Cfz+0udOuRuUYkcd2yzYNPJIox0pYd7Hc6tK2ACBYeSGYa/qolbJuFrcqOF/A9ZYxrNdwxIUD1bXuY/FYbExuB4rT1Ht2aVM2w1M6HjtOu2220fRyqO/oCGDRMDp1vUbhXT6WM2xZ4VtUfMPKkADg7a8e6FvUd+C3P2LN7nM3Oo+AsnHPD8NKL9CYcglgw/Ksszapx2mDqv9pUX/TUqu/27WkWTcfTZShHcGUa7CWKOkXVEFCCw7u5Y7PGTbz5lakCZts4aP8AmoCIpGxXuVlOrIflssROoBeQwPLEtssynxLF5JQgfzqNtpHVbz6Tdossdl0jLJIQnkAcq0s9XyylZAPqWLFZzvSMkh6gx4AISW8+wspAJI/J2kus5Piq2klQSeTzqf290LKSAxVgCFDhfsNogYEIOD2j19O3mM6mVQhRzwAUDN7mHxb/AO1pUcLsz+kCqWY8MDyGVu1hHjAe7ynQkAkoPizNExLPOrNfIVlPOvOrMJe6Re1NeXjOvbagsH2RlZdWRpqFvyTUWRxw6nUrttqZYQASoHJ5JPJ49Wb3NJUslQWiBKlvA5kxs5HEq2NzyYDSYhMaTzEJ5gBMYDHGMgLCEIDwYkI2AhMAYp9I0QHRIoiQFESNiiBThCLMaSEWAEMKBHQAiwEiiBiQFhCEAixIsBDHCNMcJoIQhAIQhAUGAMAYAwHgE+igk/wq9zNH3vf5S2DmtLQ1BVGdWUKy7Ky/Jdpe6AHFimojz+da09zM0TxT0LJwlAvsU1WO7r5dmyWn5Wya38Yz3EVmsEhCxcsx22aJRj7+WWIB5BO3tUfJpWSzbQKAeAFKs2s2RjlVO3qrKeHb4mbGsnrdyM7lCCszqjz6S3ao1HIGv41Ue0ymhA55mDRxlJIHAPHcWU+37SagG2xFY87OOZWFhXjyyefVhrLWGNLFNnCsGVzt7VECXqi7M4X0RSUGqzuvA2lKCxa1Wxl904lwG54BFjd2rL7ht9ppYHWWRawoBSTnt0w8Xp2ZnLcrJYoKnt/ZTOR6jkV0MKrQCAdRcpRWU6tqv2kL9bVgwY8MO4q05nxDmi+5mBB4SRLdu3qdOtoahuCC419Stg2Vv221kZar1CWqQPxurt6fJZndG624urrZuKx26t/r5OqyAhmRQwYFXsod1XZuNtlbX67dvbOuk/2rXwsNGdwtgscDkIgTVRGdX/4cf2XsrbjKAL+T/rIvBOQtdl1jN6sZ0eb1kegVjqeVLLOW+1X5R5Nj0mtyCeSoLSe24FF5J5+y/wCsf1CsLYzKOAWPDfFjIaBtyhI5J2GzTq4LD8BUZRwrArIus5IscE+hCohaSBS1LKPQ1Pyf2HdM48Ow2HKjhSs1KQYbEKU5I59dZJ1G50ZFJ5KehZZbfONa+VjqNz2s7LG4HTrGS25gWrqZRYyt9oYs12chTwByOdZYrMiyLg7MVUIhPpWvtQawrPH5mpTFpCWjyZGfWAQjYQCJFiQCEIQAGLGgxYAYggeTACA6EcBFIgREQIikRD/MCpCEJgBHRsdAUQgIQwsIkIaUQiCOEAhFjYBHRsdNBAniEIAIGAiGAohAQgavh7Jtpux2qAZxcNUUdzNq0l8bU5FNlVeRUyqaexrPl9pWxun5TKb8YEWY/F4dWRXQdutss+LerXdWxac3I9Hpf+lPFnub7Kk5/q/8uSegKTyOCPUp9f8AKdGSBjVl/wAlhxM41122KQQK1UM7tLF+R5wUqCKVIrDMs64IZmXj+vAIAJ5/VTM61ShIYEGdBm0hXYKCFIJCt2ssxup2BmBH544MnJpmO4B5PoP5b6zSqItLADkli27e1Rr/AOlZhgy5Qx4I5PA7tV+Uxraq4G9hPAP9tV+Tj/06yRKSAwUErt6Ko7mOsoY1xOxb1VBqE+PPyaar5DrXUxIUt3DTtZRNEONjkuSSS5YUBtpay8Piu0+mzXCsMw9wWM6ISHVm2JQlgqmW8m82MFRgVqX1X/3jM20SQ88mWa2DBge5j6a/Ht7ZarybDwG5LFddlbXU7dskJQ+WCOeGLHU7LxIRZryTyQfQOo22PxmiHGzzUWA5AY67LL2RkOxVATqV2Hx2lHHCDzBbyVIK7MvtOvay/wCS6y9RwoQA8kAEOzbLy3tVv8pOm/0ulO+sFWFgJU9wZfide2ZuOdeAACT2903LchWNoZQVB4bb6fFv1ZWmPjWCqwhgCv8AC/YTWJrSE14I9VNTbdu2rfWYZyOGDKAAJbuyNtgQGDdpZvcp+LSI46lBxzt/Dbdq/aaNRKDZxZWQwIBKr7lMTBzmofIrWw63Jqd5U6ebKLOP5HqU52VhLdHSvPuABZtjyFWEpwJIIwDjkfkA8BvtFBgSEyMGOJjQYBHQjYBCEICRpjo0wCKIkcBAIoEdAQFEUwEQwEJkZjjEgU4QhMD4QhAUQgIsBsIsIAI6Ni88QFMbDnmKFJBIBIH5ZQ+qzQRZPVhs2oBUcjYNt2y1idFuvYJUFZz6hFaYM6Ev5HSLq+dgAw+LGVHpdfUqQPtHQjikRyAn0AJMfXQWPH4+WzLN60IQI8KTzx+ANi31nQdU8LvRXj2VbXm3jlq1Rl/VZnpieYzmwmoIOXa6vVVHxVVk7UvdRwsjDewC4sGRaGyVZ1rvqapWWr9l1aQeKelLipVQaSbGbzBk/G3tX4yPqPUqRW9NVVlyrxat/mOrKe3bzfsspZvWr8/V7W5sqr4DL+0yexnumnNS+oJBZ0G2xm1XdWy0gstda+pdyncPl2zn3LqpHJ9SW2WNroDGsEksfUsw9s6RLcTJWy5nHBWxTWrNOdzKiu5b0ZW0C+1l7mmhaFR2C88g+npr6ayn1HizVwSWcbFYrYywZPQ3HoY9ArKVIAceof7SvwQSD6ESGtCu48HgngggsvxjjltqgYk6gKFb4zPDEegkwIPAHpxNGxVnsqEA6p7iqjutPxXb4rtJsKzgKrEBjy7P9dlmJyfQEAn+FVpZquK8ngE87FWgbNVyhQCoBClzrFxrOFqVuCC4Y6t3cTJtzC+vPGx+S9uo+KyMZZBLAfg867dvM1LYvINnBACkuo9fd7oyuwOpCklgNDt8jM23KL7MT3E8lpCmQQG5PHJ5/wBpmKaFlzhmLA+o1ZuO5hMm+7kcH1C9oaOyMpm9SfX2nu90puefWA9OT6/niaVQPaCeSwLCRYFIKkkc8euslxMgixSwA4Go1mpXUr8otbZwABqPlsZJiMbEawuQ31U6sw7pQ6pc9o59QgPAVY7peR5W1diAq3aG+SmFL20OYgEISXmAPMQDiKIDoRIQCEIQCEQxDAURwjBHQFjo2OgGxhACKYDIkWOAgUIQhMYfCEDDQDFkceDAdCAiEzQsBEHJ5A4/ybWWasQ2lVQrye3vZFgOwMUuSSAVX1Z39iD4/wD5ds6aqnzcS6hTXWysLArNqzzlc6u6kAAr+SSK7Ebb6t9Z03hHrq5VZxsos3xr9la7t8rbpzu1Ko6a9FaF6SOPQurdk1MTpmW+uQuPZwFFn48pfL+VskGLlIuWy1q1dDauzMnlMNl/8KbPh7q6Bnss3ux0XgI+T3L+qr8lmDN6nSc+17MfILEV7DDsrRXXWZadPNnNbJYWUbhEXuYzoPFeDRegsw8msvY3phY3czM32aZ4LVP5dpuYKi8Kqorqfk3/AMv/AC1aSozGSiyk42UVxrlYOMllTX5dv2aZT4HlqxdSxLa+ZWzqjD67a9s2T09bbGFrCis9wa9Urdxs2rdzazNN1iN5bVG3uLHG9yufguvyX5dsxrVwsGuupLLbdVPxe12R5S6+Vure3IyAbTYEGGlaeayKvba0xeo0vbwVa1MdXVXS1tVUt7mVfav+1V7VmL1NDRb2EkqfS5m2VjNY1LOoY2NjW1VVM2Xk/wBuxrK+3Gr+qzmsbJNTK7c6EFDHWMW4DEsT+fWTmkacAEEdwZRt6/GdMUrVmlqKa2UgflW7WWVTXyCSeOPw31MrVNqxZAwYEEr8V+00+oqSU1ADMoUoq6rOqS0AWvUlh4Y+gsQ6q3a3xlG3HKEhgS55QL9RNPp+KKybLTxXX2jY6szSEsrszhgTyXC+1uZI50gjkMCDDUy9k0htnX04bgrKfBHp/pGlIooPEUrGyRMln/fgxwsI55PPMgEASIE4PP8AJEkBAlYWGOFhgWAwAIkbkCQkkxwUkEkwGjljwJJqV4JAMbUdSCZoW1ggEE8H5N8Yggw7ghJPqp7Sv2EntUN3KR6eo9fcJVYFeTwCvJAcHZWl7p1C2KC/IQHguqyhNj5aNsjDtb8sw7ZpY2O1VPmGnYWuUXJYoyr9lVft+zTFyaR5ZZfQh+CqzV6Tl2X47U+hSjm3Vj9m7mWYkwiAHEDAHmaA/wAiII4iIBADARYQCEIQCEIhgJHAwhKCxwMZFkhwMUmRkR4HMBpMcDGERRApQhCYwR8ZHw0kQRYn/ckAfZpodLteKBW1jhl4/H7SmMpE14BI9xZ5Lb1kWlNx/bXhdJFFirAU1G6zgAdo+zGSY/QHvra0nVR6Kv2kPUesrd5VagJXtNzP61WoSnHsVlX5Ke1ZHyY5W2lqtkIJYdp2DtrISuvrWSrfyqtrtNJ813GSKhy9rAFmCM2n1lK+hxqCpHPy5906N7d34Y8R15deNg5N1jehWuuv2q31t+Typ1DHsxLS5Uqq2FRWq9rHX6zkMTp2SzAUU2bjhxcvx+vdO8wsu/IZq80KCWL/ANTZU9bL9tV21btnO+1LnQsezL4THtQXoDeKUqT/ACW21mlfPxr8qx3UobFp8oul1ei/ZWZW9sb13p9dmj448qtQazTk7q7fa22ZtmQaTXk4XNmQO0439PrUo+TftMUj6p0+m42FbgPKSoBsuzu+KsqtKvV+t+Waqun3uq1Job6u3zW+Td0oZd+U7va6njj1XykVWPd8ddZS8lmUuVYKRrsvtWIxd6X1PizHrtCspbue4vs8ueI+jsS9i+lDPz9lxvqu0wBWD7gT/oy+5TOm6N4rRMS7Ezcd7KgCVycazy7f1qt+LrN0bctn4rKwKkhQBxr8hDEyjyqkkEnUNtN/JUX0LdSAxHaVU9yTNxsWtSLLB6jlgm3axWdME1fSkbEMFIUBwzr7vdMcWE2qXBUF9jt7V92rSU9SU2M4BZj+EXtRZDm5Bu5LHuJBGq6rKSvZKm2umvbhkZgUX3MZVRq61YkA6r6L9mjqLnB2cNsF1Dcas31jagbBYVXhiDyvtXmGq5yg4KirUE7FpXKgc8CWhWeWDEg/wqyEggkH0P8AKzYIXpJ4IHoZFZVx7ZbA/wBP5/KyRKSfXjgiX4SwZXH5BhxzNGzE25442EpisoSGE5eNjZUXHEAOZZNYPP8A3HIaLXj8/gSVoEUmWsTHNzLUnAYn1ZjqqyYUleCASxOqqq9zGa9rnp9VuItaNl3cG2754w/6MkZHVzXyK6FArrAQv8rW+TSfpVYetlYgcn0aZhBIPHqZcAPl1MpHIlz0k3JpCMa1PPPaWYdzGbd1KUVLWWKDX3KNmc/JtZUooN4NikCwMSdpN1Ei/Rx669pWXEo8Qo6GtAwUE2GywSthVhWb0IJBBVhEqF17GuoELyRJsW3bkfkD0/ZT8pgsxoEfxADiAgEI+NgJCLCAkIscBzAZCP1jSICQi8R6Lz+YEcJYFMBTAgA5kwWTJRzJhRxAoOOPWRky1ehEqkQKcIQmMEfEikgckkAAclmmNJLON05riwPogB5baQJkIpBUOx12CsuqsYlRut2LEqqjk6HVVECajptdZbYGxgO2tG2X/c0t0dPoQNZlFSfyEVpk8FrBW1oTkhC7NqqiVjYqlgSX4OoZe5WmKalGRirahNZsQeoV21VRJ83qK3PWi1VU1s3xXuaYdQsY8KQef4UbMsfbhOvBYuGI2CsslLtU6Vhrwg0Fh7i7WO2omZ1/GpFiCkAgdoatpz9fT7yCVHp+C7NqrSMUMm42CuB6opddZsg6gU20VkPmWKQuxVW936qsMKnNag3pmcBfQU3/AK/Kcgbr2/JYkdsV7r3ARnbUfhGaNKXres2W7FnYt+QzWaqs08Dxk9NIpapW/wBLJkdO6Yb2AJ5J/CqJes8IWdup/MXQlr8VEgiwFpo9MCZboUuAYrsd7NdTOVv6TbWzowAZfQylwyn8kH/VTHxHf9R6c6AhgrIvrtWEVlEzss0PWpTHJY+m1dk52vqdw9Da5X+VY9rCatHV6nZGsrK/EtQfd/jMT2rnDuoRrKrQa27Si2av8fcsWtWaoEbcntKsHZefsre1W/WbdmCtg82h3urY8C5Rq6H9lh4Y6muLZamZWrYznfW1XZFf9oHPZNbqgJB0BPD69rfZlb5QozrAFVSoAGuzL3T080dK6nsbWFagFhdRkJY6f4zz3qfSEpd0rPm0g8Lao13H2m7Ur4zFiCl5Ng9dLfY4+XdNvPY182Io0KjlJkf8map6mcgKR5h1buUS1n9XB1KoDWe4K/azzrLNJOy+LVWwqULemn1ErFRYCGI2A2D66s0f/wAxW1kDHWs+hZV7U/VZE9hZ9EAK/wAOw7lE0UAeZNVYPwf5mtzWw1ZVIA1LaorSOvAoYHksAPwyt2qJk5V/z3FccN+DyZHkY4ccH0P8MqzTPSqhwUuYE/hmXZZGOmW/hXRuPUts6zp/XGxHhkwxWV5B9SPw2vumnjY23AAABAYt9R8pJZ0y/j/wwx/hUZGiUXWUr5b47c7bFuO1hPNya/Fzc9tHp1Ixq36i/wD5bhMWmxe26z7f4znsk6lmtJa2wl3aa3i3xGM58crQKKKKRRXjJ7V+1s503G3djGGpNtqatC2xAIUnX/aIzEL1uVUkA9pHxaTdPYOPLJAYfhuPcIX0eS4LEEASkn0XtS5KAGtu0qy9rSYAIxCkgE7dre0xLKeaN1APJ5KrIcZS6vWSS3uDbbMxlDQx6QthLcGpu4srS5V0Dy1qsLoPOPKVrYjN8vd9ZiY7GoAsSwDBjWx7WHyWafTrCzW2VVBUB38vl2VBIyExpAJDEAg8dvdtH345TgMB6jYMrbK00Sa7qy9akMG2CM2yqPku3ukPT1a4W1qCQoLhlWZM2aZ3ESOPI5BHBESdGEhFJ4iAwACSASPniOBgPIjCI7mM555gAEnoUH1MjQcyes8ehgW1rHEa6gRou49JDbdzAnQgSyigzJSz8S9RdzAZlrxyDM4jiXsm4HmZxMCnCEkorBJLEKoHJb6iYwtFZYgKOSTrHPWAxViAAeDt8pXz+o6lP6ca1juG3uY/ZpTHmXE6g8fjZjMa0svMqrrKKvLlvd8UEqjqVgV0qJKsQxXjulodGSt0ryLfU9zNWO5JoZt2HQFFSEEN8hsrftIUxKsS+z8glj+V42aSp0q02FEUsw9C6+1ZtJ4kqrpKr6u3odVkuB4tooRuELWtJ3UsqvEycazhARae4r2MyiW8+u5LK3zFY/yGeVMfxHpa9jgvs4Jb7CL13xMct1cAqq+gm/JnbbycsPSR5DBh2j01VRM/o+Acx3JYBFkuF4toNRpyUZuTybJmZ+fTY6WYp/pwPQrWX1Y/bWZJWt7rGBRRWxABb8BnXuYzBwumPlFygIQfl2GyqJA+RZZ65DFgO0OonWp1enHxgavyvaEUozOY1liMLCZsGwhlDEDUsk3a/EFZRVC2C/nUuy6owlLruIaK6bGANtvdusD0QkAMXNx9SvxUTLq+w/DwBl2OBwQe7b6LKXW+n01Hy1BLgRRk39M3RSN2/H7CZ9dwF1Wzc7t62fFZs/6xkviEE8AE/VTI3UqSG9CPjPTMnoVLNU1dSn5FknOeJemKliVqPVps5JemsbA6g9IatXIqY8t5Z7mm50vqVGq15NZsqHaPssov4YuXjQBlPqVaU7cG6g/3KXDfwsqXGjYrrxEuqH5xmyErOTZWivSO3abJxbLggxq+agxQvYyKzitm1t9varfZtl2mH0PqaUq4yalsqddR+pmn0zr+SxyK6zsj17NYyu3lLX8v1mKZniTp92Jf5dhFqFAqN9Rq3b+rLMSjAtf1Wmx6wdtlredZk9QdnJYqzaBjk3VpZao+KqvtT26yrfnlyhXItsIXYszOup/6Srtqqzdjn+oY9ikKanRT6BXretZZoB4VQpdz3dk9B8E5ltnmJeMqyj7YzPatP7NU3uWUuojEryTWvAQ8E5OIr1o31W2r4931VWjdXhrfblx0qwh2WyssO41t7pC+NcqtZ5QetWCF6z2qfiuvunU5+A2JqWI76yj3eWllXFjNr5P2bWZ2FjD+ox05JqssV93L1r/unC5167x463HPDLAPDBlb+VYSzVngchXBJmv4hYV5juxRqhcELIuyMJpZ/hRLV4RSbgOP2Y92nd7Y8k3jsc6mc6+oJMB1NySSTz7irSpb0spsFdw4HJVmijpGSGqUvWDbwVZrPtK6TePKRcPUi3IIBJ/CsuyyhmFX4IAVv51XVZBmU30cGxQQWKB19rFWbaH9zRLDUwrJKi0r/bYrLiFeigCxS38dx1WWM9hZqVPAK8nb4mVxeQysQQAdS3PbL2XjgrWyEEHtGqzrPTjfangdSfH2QqHrJ5NbyazIRuGoq0YeoVW7lMXGpAchh6gFhKpYBiGBA/A1+MxDRqzhcCRjjYDksqyOuuxrEGOGDN2hK/cxk3ROK2udxsFGoRT3OZteHfEa4aX0tQjG3uGS/bbQ32Rpt9KWPClNyDPC+WpWvl6cmGAQtxNQYhkKlazqyzPOc9gRHAJT82fJ+5tmZvk20sdGxFtsOrdo7WbzNWb6/syzipl9XuNdrAngnuCyfywUVlP5/MqdfpK3MCSVPoGZu5ZqdOpHlgKCCRyVaXvSVLjmIBzFPoSCCDFB5nSa0knEQHiOJAkZPEBwMUGQho4GGJweI4MJCDCGpHaRk8wJjQYDgeJIGI9RIY4QFsYmQx5EQiBTlbqDBSEJ5I9Tq3bzLII7ixAAG0oV2D8sAQDyFaYHY9YPJc8KO3Vj3RaOoGmxWUAhW5CtIXVm3J4Cj6j3S7iYaqCLyKw34VRszTFKWTfZa7MSeSeY84lpBLchZpUZFCi1Gp45HC2e51Mz7LC3ADEgj0VjMSi8lF2DE/8AZoVso2AUkkcDZdtZpY3Q7G1DWIpPcN2k79FNTKlttex7SyWdqTVMvHRwAVC/7mHasmx8C3JYCqsvY3cUSWM80KxRXGq/hk3ZmlcZDn1QuvHoGU67QkWdHsUEsawQ2pVW7lMqjEVeQ1qg/wAaHaSvSQV3LEH8t7thNzofSFvZdvLWtTyVZu95jducGQ6dpPK/wTJsfIJJKkKT+du5Wm51fFx6Q5VAQDoGmDaN+AiAEegZe3aGtm3q9zNjtkkWV1do0+I7Z1p8W4zqzqCbNeBX9p5mWtQMrc6n0KxcclvQIxb+Gr7mWZcJWadzhYFuczX2AEH0WmLk+GlsrexDqAu0xumdfyMFGrKuEbuDWK6zYxvGNApetlYWFdR8kkXf4jtg4AyUIsx7GHH4Vd2jMnOuLrcz+ZYrclW/0Wdb0zqmKuNjr5yq68s0zuqZ+CyAghrPtXNl2S1o9O8YYrKRaGrs55kWFx1W5m5JRO4fqNmnGIiFuX9FI9WYbaybp3VbcFmfHs1DdpR/lM/nruKaniDooptbQftNPw5hlcRya7zTZy9tmIqfFuypm+vuac51DxPZkEl0X1XWbvT6fPWqlXsrZhWouS12qRNe5mql96Gnh3pWHNfTbLGtQB1e2yxmH2101WQ9XwSqIB0izEBJcv5lliNNt8DIKG7posyqah/R2Y2WvlP8f8nWV68kLyDl5fTG9AcLL3somKUOmZHARsa2xb/RyyLYqK+rbVdrSv4lz8qzyQ/rdrycla0VmT4zczcx3puOQ43xfQ0pXWvnCz227JG9TemvBx7K8cM9jeWGVn2ub5N9lVYB0zq4zKbcfOQsV4YXV91je5Wt/VpZowCtlt2S1Bsqp7a7GetHFarrb9e5W+Oys0wvDdNlPn5VQUGrlC3mJW1Rb5MvzWally9XWkswrGIOTT8bvtVOWc6duPP8cxfpeXa0BVZwW13ZkHyZV+Tazf8ADealbWUWWMyoP7N6K+9427atfarSTqHTAKw9NiXLSd/2er422tMPJ4v2f0R1f0Wit1Vh9qm9zf7W9qzi+ldcmOnWdQwEuK5dK2W1p2mlO7yrflatXyXb3LOVQC9wrEKxG5uevVkOrN5Sr9dpqdG6u+G7K/FbNxyqtsrfstm3c23uWSdWJudrBVSuQz8m5d6lYf8AVVJrj3jPBVGEttdoaxAK7nKtYNvNOvxjejX11o2BmANhX/3B8nw2b/zUaLm5NaWUog8+qpOHq2dU22b+7G4+OLBVrUR5rOoZLHVnPxq7u1W1j5Nw8fHVc51vpjYxtQgsynnf2o1Wq6tKIuSutE25Y+pXadX1OxLAosIdWXXXZ2dD3a1M3xXaYHVeiCqqpySzn5V7srK3tZvrPRx8nTzcvD+w3I4dayoLH+WUdyyvjuC+tg2I/DN7uJnpc9PIJB4m/gZS2KhYAMfQuonbDVeO7is4FDAliUb12YRpUEkjgoBsWVdm4jes3AgIjFyp4LMJR6dkvSQdSQfwrNqqmbW/5bSUqa6i5Pq2wZG1ZhNvrNmNg4qjHtFmU9oda/mg17vNmUWW1eQFDLSUCqqLt3N3M3ybu90rGkspDAMAvuYdyCc6qKBsLFdhs7Hnu+M6LDuI4LDXgBQ2vasxcTD1YFuSh7hZr2sJr15Io5F4L1sNQ7ScvSP1az8QWp5lZBcflFmMDLo6mtOyMQFI9NTKCEkcn8n1m8bDnMjJ5jnEinULHAw4gBDTgY4esYBHgQCAEdACARQIkUGAcROIvMAYGJeeef5AOusRKQPW30A7QjfIyTG0Tknlm55CM2qrLl9GzIW4AsHoze1frJC1K1itZUihKyCUZu2Z1pYkFiST+Gb28SfHDKzopX1Gp07lYbd0tgV1qAKtmH5dYDOnY9QIsyCSitqUVe5o/rPU6rCRQoVR2iQmmsqzs5Dk7eWraqo+KyqERjwikgkE7D2iYInybLAB6njtljEwrryqkMSfxt3K00U6Gxr8xSoUy3jdZrraoKCCoKlWE1m2ff0oUahyA5m5gLi0qrW1V2Vnh9rGmD1jqS2sWUnkd2zCdH4R6EmZWLsqu1kZjXTRR2rc3y2b6qsm+jVVOt9RXOK04mOWavkh66+5hMezLuoJQ1MjAanfdVnqXRPDGHgVpkmxxYAVF7W+Qt/7VL8q5j9TxTaSHHmVswYJqjMgZvi3tZde6OtK8XJdH6RkZOrrS9ltoLVqNNOF9zfqs6ajoXTkVK8ryaLwvrfR1JLGtb/9Vi5fTAq3VYbWVrYw2pdvMW1fjUtvuVflq0y8zAyBpWuHVX5rGsKtXmP8f7rW+1V2mK0udc8L4SmqvBtyrL2XYrZXsqr9pHR0Kit6Xx7XVl4281UZn/adx07o2Li0mjFu8y1V/vMvalu3xX6rMXq/SP6Vbcm0NwvqaKx5bM/x7fcq6yd1q/1/DoNKnIyr3PoThZa12N+zU2quyf7Wnn2T4YpW97lYjpittvb22svyq19zPDE6/bXej5gRsezuNS1oy1/Vp6Fm9MD1MUHlKzC1LkZLalDKuqr9q2WbsYw6L07K1OPgGvH/AIyb7rGeZ/X/AA5icImPUy2H1W1bK7E/Zrp1Co3SqrrTWz11uFHlq9rYwZviv1ZpN0fp5vx2ywLFfKbkLeta2pVXG0eLhB4WqOyi1iq9vmNW7Mx/WNzPDfFYRAGIfU3OqVL+vdO66jSK62N5etVBy3s9uoXb4/LZu2ef153UKz5jKxqPDmmyp/K4/WVuq0o5PQClD2ElSrBCltbqrH9Wmn0PPYU02VqP6iploNvyQKrapr7WVlnX+F+r0ZdVtRsDD8v0vNXzPb8vsy/svcswvFPRh0tmzMX1xbX0swvctB9yav8AX6xtjVwOu3NSGqL7jzLTbWvmNTazKrXTB6pc/U83m28sxUI1i16qtddXfrVNP/mO1DWY+Igou7bM/E8zem3Ve1qlbVF/VpS6gb6/6bqddQ9San+SZJXtb/F1mDoOoLRk4+WaqnoIxtlS0ozsKphY/TrMumi+omxlFlHkf9Jal2Zqo/I6hRRbWaHtGI2Gl5Rmex6tttqavtXKvhq9qbcnFUkNepaq6v42+UzI3+SwJOqXIasRzkEo1IoO1Sdlte0r9O6w1NVxqQVq2TWoZ/8ATym2q2lLq+VTYuCtAbzFrKWKzPYu23xlRWWxkx/6ipOO4nJfWsuzLsqv7V7V1mVc9vQ8DqdWVW5Vqq1DaiujTzaP8fb5fyZpDn9IA823ErexSnAauzV8b3f4vXq04jqYswzSlWTjMU7hdg2JazftbNSvxOy4r2HGtN5IqGTUz1Y9QX4zheOu3Hy6qHGasM6spAI1Vbv7jVHt2bb7art+sTq/UL6LKbK1LKEArsySljV+7/H3Ntq0TG6guUl92Zl1UhDvqte1t7frNHG6quXVaSUVC1TCj7WV/L9V1iR3/rMq0PCOJXk4doqZVzKib7Uv91o+TK0BhDD81lY1lwES69Us/pj27N+tizCxKW81LFNLMzamnzOz/Lu7ZuDqqGt6QVrsHaysvubbZmar3MuvbMLNXplW5FVvDMFDLzWWr3Xzk1/8Zl/3fbumHjXXUuVqcCm30PmKlie1pavx7SzkVsGALlFGzIPk2v1jhTW1Vpfeywrqnlr2qdl2aJ03e+lTxT0B8exVJWzmkXi+tdUZZhYVoXlSQrH0DNN02MyrTks6gLqlyqi+jN7Wb67THz8AUME8yu5D+LKJ6OOvPzca8mAHQEchlHPb8hGVYZvCKvAYk6q3yMd0y44yr5hIJ9dXl/o4S10LWEDzxWUrXa3hvlUs615mOabK3NbKwIIDKqv2zucv+mfFxwwFeVV6DJo7ky0/aXL+necLrFBGdVlvtbk+1lWpm1tqnMYFKZ9p3FioAXK4nxX5MqzmLVd1djpWoCqSF21dlY/bX4zl+p03Cx67SVFbEBGadAa3x99F5CsFV2Xu4b2sv66zV8V6X04mclYVivkXftYsDh8bHLsqliGPaN502B0ogMHAJEYmTXaoD1LwF1Dt2tI6utqvIZ+Ssm7SM/EFXBB5B7tZR4kbvZcfMBOgPtWPBnXj2w6EIgM6NKBJQI1JIJIYRxEBkjiRiAExsdGQFJ4gDzGERR6QMl8YoQW5J5lvHDXFQx7VHHcvaol0eSfW0HggcJtrtKwzAGKLwEJDDX2rJZ+EzcepAEqLA+4s0Z0/KSpiLVDKw1DfJDLWfSiahiHU9wdPiZS/oiwcqCyj13btVYPxYxsBLGYqe0flW7tjNLpWOlLXGwAt+AzLMnGy0qBJPDn1MR8e3IIsJYIza7M0Jaw6qoV66gzMGJGvcqiUMbpGRltaakVmUGx2U6og/ZpWy63oZqVsYMe0qs7/AMDGnGozcS1mXMtYOcSz+17flVbMVJHN4nhWy4bgcYquqvmL3e76z1XG6UMak1kGuoKEsp/7N3JhVN+3usacv0zqNlBWt7mNIJdXX/ym+Xarau0reIPFNaiqm9rF9wZE7ravtbd+zyN10R9fwczqhsvFjthrYKFWv23ftT9q/wBZm43Tup4LLW9NllbIXGNZ2u1a/Jfkk1qOuk3IaEIrIArXp+9lTfVfK9y2TrMbp7q5vAuNjcWu1tbrbx8e72q37MzTFMjwtl05K3tgsteZX+MTJVGZh27rbV9fi1k6j/lnOttdIVgTzYrf2p5h486ghtKYOpy/PORbm4ftU66pSjzL6b446mStK3sXY8d1abMZqnqvU+o04GmVfaq2BdTYtfu/21fLVYyvHuvd8lhs9tf9utG8xFo7fl7X2XuZl7laeV9c6R1C/a3JtNjKNvLLfxIPC3jrK6ZxWrGzF/nEsPbCHsD9GrZGDVKKiO6la0Z2H1W3XtlXoSnB5xbwbMc2FKH+VoZWZsL9bFbuWcrk/wDFsMh8npyLb/Fl9llqpOF654nzM50syMhmNXGi19qVf7Zo9+oxbbEAKC5D+a67NbqD/wBJl2711lnG6fYCxv5UshUVuyM1X2ttt9qdvdqs8Q6T/wAR+oYyeWLRYP8AXJrWxpdfxZ1HrjJjG1KqW9GTGXylhsxtro+p+IWzzZRTbS/kWF3Zant/qRX2p/a+VSzdfpVzU0F1pGYVRvJoZGXX4qq7TyjO6JfgtVdUWRvWxG+w+ytNTpfi3q1Nfl0kqvu/qHq2eTtf8q1PFHSsfpqDJNrUZPHGPjUaJa9nyuf61w8NeJcPOryKOqGuvzV9zLrVv8bV+rTmerU5GW5szshnt/BsdkaYtvSrEZ15ClfXklo3ifyyd11fo7dEr/q+ldTQq3CtjtZW8yemeKMZnFmVS9dgXTnC7qbU+SPS05mvBc6+YWVGPpY2+rR2V0eytlT0Zm9Q6N2uJe4z+eTrc2zByGDV5VVYVeB2ui/qqqyyrm5VNehqyKaxWgRfLZ7X/bu190401Hkjg8j4qsK6SfUA8fZu1ZifCt3Hyg5WvHB80+hudtmf6qv1nQdTFDULRZj1cnvGbWvl20tqu1TLOb6ZiPUa7FAfb0NK+9hPS+l5eI+oNQsPOjLkjuu+y6+5LFWRnXo48JPs89TpBQqca0M2m5Zq37f1jeo5WUdGy7TdUeXCLZ2zu+r9Gor3OKLh/olvxHyWYmdiBxjYqhdyfX7MW1/XZV/+5WkTOrvHjfTJHVMXIVMerFqxSW2bPy7ntZv8vjH9QsurrqxjkU2UBmsC4jJYzH9rYzO8OLXYajYFdWFT9yMqHaTYfQxTktTXlhLQ39vNQOqW/VNddlaXvFzvDfwzqfULVGIv9OuOq18BlrdWyT3f3Wjuo5dVl6HHFldX9tWyb+61n+dsnz8bNxMovZbXk2MPS/MXzUb/AO6VV6ncbWyMrGqzGK8+W4dKqv8AFI6ZrKNPM61Q+W9gttFCq4GZ5aLbedfr+zTIwMsLXcWNgtChaUr7lZtvk311aR43ijWyy63CosuPonmBxVQP1STdL67aiWpTjU/1Np9eoWd1ir8qk+KxpO+Q2+6t6Kq0qf8AqA7vbc7bIq9uirIuo2bNsuOK14XSld9lCr9vc3cu0nvyMwVJStVNNKvsVrVC1z/Z29zSrm15WWxstuay5u1v/gsdRmsqr31taDk3WpztwKyU2i9HyFW3gsfLbhC6r3KNl1b9W2lmvw8NPMZ2sQghWQa7N/lMbIXyiAOdT3Bp02Xisj03NWw5FtINpbNStq2WxGdX+tsjwOiXLZcgtVnqw3cIpRX+StUy/b3TlejddNbJaFBuRdR9lf43TWGXXTTj5GPlFs+y6wvXb3Np9pjiuYnTMiynJIfY0V8v8tfLZZQbqAswcvGO3qBkKtnxNbNJ72uwarQSF2ZCKV9rCyptlmTgAWOK1PGylSzjVYHOnLdh6k8fVY5LKxsSCW/jYzU6p4e8kKZnnAK8NqSv2UTektCrqdK8gAgEesdVcrgFef8AvtMk4RbnUeo9dZo41IrAAHqZQmigRo9Y4CUHCTgSJBzLSAcCBXcRoHMkvkYgOIjTHCNIgRkcxBHEQgUxkHJsAAGvtCR+fhCtUPqGB9V11VY41mlvNQBmLcmmte1TInyzfuNfydirfEwz/wAVq2LaICSedTNzzilLVk9oGuszDWK9SvqQOSq/GLjWG1wXsAUEEqywymvgO5QLXwCeQ7dqt9e6NtynqLIpIAb1rb4maHWcs28mpgK1A4XbZlEwHuexwV4LAggqJFVhja6/wpjgWpk5F1RrbtLf+Lam36/CL1vq9dtVm3D5Q/tVXL/5VfmszW/beZA6rmFDWAiq3cXWtFZ5L0zpdp4s8k3/AB8vh+06tIterDh2qf8ANM5gga5wvAUO/b6S3/8A849Yx7MggG+0IuNZ222r8rW+SrOl6b0zyEN5Vb7qiCKrO7HxBZr5VrN7WbZtfLlfxOmTXS12XYA91td/d3W367L2t9VkeddP5YyKbeF2qYf3bKWZxqKxqPl+3ZInXIsC15GbkXOXNZwltf8AxnoHRMA342Pdj0gleLQiKiu42Xa1VVonVPCNGSwsGQqpYxZ6Uq2ZbP1/WZuqn83B9M6dYpfEFVYuZgm2T8Y68aNjMlY1qyVUXsurO2y7TtcLpFNPm1VsUqtUI7MyM9q/Kqpde2cV4h6oakfGFSbo/ur9qBWaZuq3Li7/ACAG2LAg+0r9Rr3TyPxD0Jsbh19ayxAnpuZkBq0sBPDIDss5nxKwtxPQ+ivJ4875OHJh1th+F/DwyQXf8BZBV0UNXa5sAKsUCfJmnUeALAEImbW66Xg8LYLyQ7B+7u7l+s6ed2cWG2Vj9BD2Cpb6wzDkWW7qnGv2+3x1m3leGnxhXbiMfMTGpsdPlY10QXE2vWRWpsZQLEV2VPq1Te5W2bX6tPU8mlEGXYtfaf6agsh7+a+7tt9q/GT5uueMxeddO8ShGRbyiW1l9q8yvzKlZvlr8ZZxur39RJoDrdcw5rCmutcb7N+qTnesdGNtjXdw/qLea2tdW27tWVmj6KX6YRdXy1bqaHLD/F5vS5M9N8+HrK8drlUEqxqdKx5ltQ+VszMjHrRQVursC9qqlbqz/wDvbe3tXVtZ2Xhrrpu1K2hVPC72dy29vttX21Vqq67TW6p0XDPN5xHVl4ctjMi1N9WksnLZdVwmJ0w2OtLaLYtJsZ2V9FLN2+b9V1bXZVmJ1zp11NttOKz/ANMe4D/Ftp1WbYcLdiFW+zi8ujJYqllbWn7L9tlZlmBYxrRCLay5UoVdu9BZszMspWrlUfQ8bHyKwlhVbgSFZVdlU/H9mZml6zpCY+1wocWL6n641q/r7WrmPZS2O5sqOyhdWWtnVnX5Nr7l7u2dp0LrlbVqaiq3Kvaz17VtV/0bl9zfXaNs141zfSscvaAvrwNzY2lbKe75fFdpJmLZjq1zVFbFcuzsXZH+q2rOivFQV0qSiu7bZ3ptdlXtbbt129yzG6jnqHx0qDNw4JxrFSxGPa3lW/b/AB2VpLd+VYdHidtw/eGBBCq2qzqen9FS+hWbZspxz5y93lP3arr9WWYhorNzqcdgbOea0rexkH1VZY8NZ9lFgpFpWpidbPj8tqoZeOyIRgON1bdUqY73WV6sp1ZvKX6t2690c9It1JZUpLenl9z0+3u1+LfLb5Ts7+kJn1tbVaKrT6fOtG1XZVtb2s05kdKtoDi9QHtbtbbzGZ5CpyTxHXLq6EUXObqmQaZLaK6nym1VqpkY121VldQ7j6u69rKmq69vyXtlvxLhUu9da8rXUupZvk0rdIv/AKJuA3APoL6/iPa/d9dZu+iYXR/T8BUJa+pvLpBburRmsP8A0vqq6ybGVD5SralDKSy5KVuzMe3Wq2dF/wAvryFYpa1LsAAtB1RV27Ft+0wcnp11JsW4goXDm5W8xXOzasrTN1kyiPLxK3s8m26ui77K22Pae3VVb4rrIaQi1ICvmsLCLKaz3svyb66yPxJ058mwMtaKtVYQtWuqsF17pa8MXVYoCshXIDcmxWRdllbmmTfs/IwCq44W3a5lLjEXdmqTZtf8tV9qrMbqXSntAIAVgnmBGZGZhOr6jjONbqjUzbC0qq6urfWq33MvdrOd6mjlWsrHF4cKGVtWXuaZLdquUuLkDW9R5IKkfJhL+J1ILsASrMNS3xaXuu4OWqpZkoFW2c4V4PBnoleLkw1W6cl21LMXAAUbF21+s0/D9NdhtLsSyKHCpOTFhHBJJ/2trOl8M9Qqr5rNIBs7f6lm7lmX0h3nVxXdWhWqryrV2elrPLdGX6tOf/o0YeilGB9FZu1RH2XIPVgWHJU6jVlkmHg3ZIuspUNXUOTOO6zTn8/FKsz1EhlPqshBDcHnuH5VvcslzbCjFuCAPyjS1XTXZwyEBivos9OF6c7uKAHMmCkxUrIJDD1Etoo4nRiuikfmPB9JI4AldzDTHPMRPWMklfrAeRGESbiMIgQxI8jiMgURlBiShIBk1mOazsoBYj12Ha0o10svLMCCD6Mw9wlq3PB4IBMpCGu5w/DADj8qsL62UsQuynuMKlFmwUAMPUq3btInyLKuQGB5+LDbWSvSIk2EhQeT+Vbt1Eu2U+X5RPpywUM3bsPk36/baQ4lgGxClrCONm9qye7Bdke24EcEoGbtVmnG2PThNRp14Hn2vXsTVWC7ZNPcqDu2b7NN98lmZHutPlqFUKx8pVPlNqzaNt8ddpgeFujPYWd77KqlqLs1fuUSw/Rq668drCS1qkhXZ9ak9yTlk9PHurbdSFyY2Ni1WWWgatTV2o9v+3/+pSyOm2ZO92dlHzPaGs7lB+s6Lw9eldLuFSu3X+n/AKxu5cYMrb2/b4qqsso4AUqzEtoGBFDWbd/2Vdu5odZJrTL8O+ITiK2Lb5gq22L0PYjTfHjjy8ZaEyMiy0mzf9k7lWpbfdI+iYiW5DMwFbGwAq9nlOxXuk3VOn+SPMZUV8jJ9cn4qO3ZWXbVu5totcZx9sF8/IytgSaquA7WE7OxVdWt+ysyrKdlIRbURAeV2L2Ddfl8vtNZcgqbOQhYnyiiVvpp9ttvt/uXWSnFL7KCoVVCM1q+Xq3ds0nb0+GPi1unV+Zg0DnljVOXyfWu2sk8AAhV/wBe6b/hc84hAPOtjrt9hMDqNwD2gDgEBZOE+byXWqd4Usat+F9QTJ3xCN7FCMtr2L5bDZtfN9zL7l7pndDJ846/wCxWdVQGylwmxzrZR/Y11/nzWZ50/wCp489G+EumWsRfa/OJiEWlqFRWZv127WabnWOqjHxMjFaxhkW3CwKntsNv7fqq66yKjPrNLlrC1SW8mtFdVqtZW/8AaLe37KreWsf0THsKvnWgMG5WlbClq1bduRkKnuav9WkKue8tuXoxGtqtKWhtWNhoVdfKNbLs31aNrpUutd+Q7UudjYte1aD4r9lmpmdOXBNrq1bMrrat/wAsn6r5W2qr/uaZdjkm64L5mOwVH8seSv8A8qY9W7Wl/wAiTHWm3GyjQWxv6l1vV7EZtlVV1mZ13xaLF/pr6uGqYc2UMliWftO56iQMWt9eVGHXQfLV7VqSy33e39ZyWZ4QpuXzDcRbfcyVvX3Vqi+2236rOk08vul6J4fOV5TZFbIrUbUNX7nf7XSOxf6YlhZVZZYvkHG8t7FqT5M1uv2+KzR8HdfuWtunZK+lL8F/c/b9Z0PW+gG/i7Dauu4roVr7qrk/Vva36wvj5LK4Xp3LutYapV5NZsZdmuErP01lW7Ix21uDbGnZFVh3fHbZp0tHSrlyK2alxXUeFW+tKlU92yt26v3L3NH34CFVpWllvtDlbrO1Lk7t129rdq/LVlaYvPOZdOJ6f1WzKdlIRWbl2s2ddPsyr7dtZ1+b0AUVlqkbhVDf1Nn9p2FjNq2v2nLdU6Yi+dk4wNaVuqrT/j3NO58O+I1yaUGQQGLf5K3b/k2zRdOXyxc64YDV1sbKZiwdrE2Zfl5qxyV0mxQVazFZQrM3azFlX29vayt9VnQdX8OFDbZj0ixW7jU2/n437VfZdW11mD0ullsYhSFVSgZQ6op1+223tXbZpDvOSWHP1U4mlWRkE07arfUvcw7l/urGjrid7K9TMh1XRUZskbNqqL8WkfXcA5KitWIuYG8ozP2hfqs57Cr/AKF67CeQwPqoGyDu1aX1pz8N96bpz7C6Peg7u4q1ezMGjsmlDWLFKtqwqZVV12+rfXXt12XuZp0SUpmV2ulorsanl1rrTRjYq/rsys3y+LTn+ps9HlIRdW1ScIrBGVdm72W35Lq0511485+HY2W2NWNWLVkHZG7WobuXZW9zdsa+fi7Y5S5WVjyzMurUhdl7qpCSloIUFgfUq3arjXu7v9yzG6Zipi3VtkUBqmX22D7e1ps05XutvM6k94Fd4t3LeiK38RuNSluocMCwCrYzOrUHZdWbt7m2m/1joosVsjHCrXrsvy0Hbs3293tmKGCmlFVQqNwt6Mjbt8mb5N9tfjMdOPk+Oj77lrtNGZcCK2dRlqHZW+rfZu5Y3GupCXo/FjG5GLqyM7rq2rVN8e3t2jutU1ZFiPfWVpDAu1fxDR/i3wlX03y8jEY2YdoGl5slOfW5VZ8gXcV2AmliGHmWP2n42/b2rOb6r0hVZyhDKG43SauMpt2JL8ABSzD2/VV+0ly8qvEuam8GzFK+jp7olu3Tk8bHO/8AJt6WsRgzKeDX8lE9I/4f/wDDvHsx1yepGzaz1rxq7NeElD/h701OoZiEDimpN2nspxR6g8KD8VHbPXhNzt83l6vTlb/A/Tn/AAbljcDwWMdnNGYzIw1NFk6kYgH8iO8vyvUkAyvDFy3Xg3iXp2uRajHgrKj0A1qFPGv1GrTpfHqI+U7ISyBeZzGBxawrJ/IJK7Th6derDKsgEhSCD/Gze6WTZxwBEvwSW4TgsDqNjqzQycdkADABx+VUzphyRz8UT3E8yInmNB5gJ0YcBzHIOIgigwJh6xCvMeDGO3ECFxxGRztzIy0CjksbOdQQANTGVVoOQ3oCNQ31MYLi3IB7YWXVlSG5DgemsvpkR5FYrJ4PqPUOre6Jj4jPoWBAY+jMvaw+TSCis3NwATz6Cdt4kCK5SoarRjV4uny/acM8u3o48GQBWjFkThQRWEfdvMOv2+23dJsy8kFXU+anaWZtkVdl+Pxbbu2aQ47q25RVasXJ2tZq7D6qvu/yVdpJ1PHCBSx4YMGCKqaquzbbt7tvjqyzi7/jfwiq4yAkKMh0DbMmrJtM/JzzYeWtJsNxcV2WPWjJquv6r2rrLiEMMalSoZX5XY7Ow2Vu6r/LXXVdprnoGMycuLRaU2Fdlb11K2zdu3+3VZK8LGX0Pp39T/UVMCXXtFCsmny1adPgdOrxazb5obygKBluvmeT9qqatu+yNrspxqS2MKwo5oCK3ayeb3Nc3tbVvq05fI6rfnWGupvX1QW1qq007a+Yq1QbyroPApRsjIr8yxa1vPc9mz8N/iyzoczo3mI1ORWitRabxTeUWvJHyq2/ZVnlPR+ov0y+0B+EtJr89v19t2s6zonjGvHqcX5YynNwK15Nb2aV9rWvv/8A5zXOeW9izw8QXQWXDF23GGivZWvb8bY/LrYWUpmqwprVbxgL7mT4rbb9tVZtWlfL8aWWajHL+c3oGrrStVfzmZO7/bMjqnUcjOKtlMgDcVCjGLLa1dbTHeeVaPhi5HbqdVdisgtN6/VlnO9UrKmz+eJoeFlSjPeupg1bV/8AlybxXjCvlv8AUzf9uF/0yvDg5skI64+BlZITmzHZ+GRWddh/uj+gHWwbeg25De5WEmyfLrsz6WpVmvs4W1lfZPl2yp7rnJazxlW5Btro2pqcFvLNjt5gXbVf2adN4N624BFrc24wChLG9te3cyL+qyEWU0IgBR7qKWWtXrfus834r9tZndQw2sIzMUKRqXZVsRrGK67sy/GZvbrcLI6/qmAzJU67qwPZequzVJY3aty6/tttK3RPDDX2K+QecP1tN/mJpaP1VWkPhLxMj2KHOjc6lLGdmb3M1v2az2rN/N6zXh20uKhaLeGsRe2pQrNr2qvdqzNOfjVYcl1pBn59mFXWGsKsebGW+t9GXu8qnt9ja92rTmHuurVSA68gqVbuVjsrMq/5KrTQ64xy8nMXHtN6qptOXWz1+eF7k/VtZD0uumwWjMay2sV8iyvStUft1X6u2sL4lfxMbc60XV1KmXoWfyPbkhZr+FvGARHpvA25CHE76vI1ZVXyfin2aUunXeZapU8ZRY0M1rJXqra66zd6n0DCz6ci60GvKWnZb6//ADWW1l9vteXHPlkPz/ENJsTHU3gNw4ss0VGNisyq0x8vrtl/FjB66KgEN1Y1fJDbfrq3d27Ks47p2bazinJveuluAfs3lr2rt7lWes9Z6Av9NWlevkCvemyjuWpu3df2WPFmGpXE0KtlqWsXGGW0bu8tPb3Krayp1DGfFte7BVxjsShrTutUfL9lXWWL6dGavhitXdbtYis7fFlXXtr9sZ042eYeCRYtfIarTbjVtflr7f8Ac0h67N4ur8OeNFZakQDf+Pk6hf8A94zP6v8A1FgoBILJvrWqKzn3KrNt9WnFda6V5dZvTitgvJZVfW47N/irazPwer5Flio9oQ2MqnJNaM6Cb4vLqSumfqdL3LYQRXUuwZV8vzn/AGX2r9WVdVZpUycdXLECwVP6q1laVqqfFWX3N2/WdVZ4UrFSCseWoJvDMyWtp7bam+LMrTHw1a0JUi2utYdqVts1Vh8rfssl6uPkn4x+n9Sfp7oW3bGB3Vk9ytOwv65Vk1is0pkI3BC/b7NVbrskxejcKwcKL61S1Wqya0sXnypyC9RswLhZisAp4Y1+6t/1aVJty5ZN7jqiUXzbFAroU+WErZ2Zfsvt+sy7ytiqCXd9Q+rjtQbNqqt7m7flHdNx8nLpdm0rx7bA5/xZtrf1RWaTYWM1ZKtW1tq81pjV/wCje7ze7b2r8WmVfDpp+EermtjjZDlVLF+6xKlYKra1RfEuNRZZ5mORXYfR18t605+32SZWMlNi5BvFlnNPNTK3lsluy6tK2D1tafMpyV4uA9LvsfjVau2useLnySTLpp9QrIrQqNvwu6dyqNe2bHS+tr/S24OUBZjuOU+1VnxnP39TF/8ASCoWVpUnDNV8X2ba1ZPVjhEqN4fV1ZgrBFZx3at9mXX5Musnt0mGOWOqMnHYC4soPDcmimxF1bVdWVtu5de7aFZovWquwAiweQWZdtD8bVaN/qTSxptZlCpqrVqmzfVW+Wu3yaR9TwHr802BFCaOWpZGXu9rL9l7fcuyzZtx9dPRv+FnRjh05Jb8tdoP2VZ1ttnJ4H4EzfBt3ODj2E7MRsWmyHB2JAJAn0MPo8PJ9lcEn0lTq9xBVFJDkcBll7Iy1qVnPAUD3Ms5bqDmzHz73YqBRYFf5L2tNc3nXinPxrMjhbg1KroWxvkZi9OoPmo/BVCdQze5pmikFAQdf9VZtte73R1WYFesCwsoPqze1TPLl9nbH6tfMYmxD6lQ3rrJb7By54PJlbAsDPYdl9PUM0S3KDbDkA/jtX3GRPYitXj144B7pHzxHksVBbkkHXZpDPTj6cr7ScwBkPMeDKE4sjS3MiLQJJgBMSEIGSVReQxIP2Ve2Q6hmCKQQTqHaFtxckEKSfks1OndKst2KVFte0tOed064YbVenV62LqOeO7X5NN42LkW22FjWjdwVd7G31XVZR6rWuBa9IdbAyLsyD9VaX+kdXexUowcXawL/wD1s05+3aaa2H0oAI4xytR9XyWXZlXZVVf1bZZg9Y6iD5lYVXJP5G7eX7fltyzxLrL7lV7bSayNQq9q26/Zvl3fJpd6X09GViujWIpcVMU0Ue5rv8Vkq0x+neImx7q7nqS2yv8Am3/X7TqB1PqGXSb2atUqA42rdnYNazTn7cD0RDUCWbgP5fc5ad3XSgpx6U51uuAKsHrZR2r8u5l1Vu5V1m3xNWVzvU+lFVxmsyC1ttRt/prClaJ9f1ZWj68sFUWuoKx7VtZvaPl3e39dvisf1HqDZGxUrwb3UYddaMy1fr+usr4RNnZariir8qlaboGZvlr3Nt8mkPXh6W+qMl6U0qhZrXDs9lSea361N7vL1WdCOlITg0HHrqUJbnuz47/t7lf9VnMUYjrk49L1MG0ZgjixXUatqzKvcra92qz1Kvp5OgLH1w9FX6myltV2fuXuVocuSyVwHUcqux+KKbgjsL/6ayvZddV3tqaUuopTbZZYgLYykIHVvLb9V21+0u34/lipLxZfqjp5GI3lX4x7maq3t7l7maGFzi0qXBAJLjEQJY9vb226/wDldre5lkuky1HNYdxoy8R/yRyhmr4zJ5IBJUjcSv1XAZPLsyGFdyCu9Mb7LY3ul/xRQWqqf/RZX/Hkz+1cn0i4ixB/AM3c3HaxritQbl60+rMdW7dtu1tVnNowSxSPQkzo7294JIqtFavqvag7tWZvdtssus472q2ZA4tCBQhKAqo76vtqv27fd7WnY+GcWiynqVyWAq2N5AWit10sb27L+04l/OV0KlAy9odV2a0bdja+1mnaYAGEiGy0LeuSmVe9lfbVsy6fq1e3+Sssl3z9Oa8XdPrazIuVlRq1rTy6/kyqq9jzmky8ytSgaxUM6zqdNlmTkFWWxaX/AK6yxX7bf1X4tNjxT1CnMeuvGrcsOXdVVK/WxWVVlbc5x2n+GKUz8SoA01vR6UtX7lb62/bZodTZrFQZVLMtHaVxNK3xj8f1ZW122nLdEzD0q1LHrZ8S1eZ6X069OpKl1bGu4dq5Na9rCz202ycmS3GuHwqxY1Na0hWDm9slrHZnTX6/Ff29zNOtevHTGYZBK3XtpXTZ/jtNWvphxrFryDh1vZ/5qKlT5P1XXb7LMDq/iEC+oUVBhSxIxn9qa/G6pu5bVb5L2tJXb51Q8dY4vcYy1qhxqUCqtXl2sW/aQeCfF1lIXGttU6/xaf7XlxvTGOeMh777GzGVnLKr7KF7lqVZg9T6eH8pkSxXKlwzMjM/c3x1/X5NKVeOWPScnpmN1PUlDqU5XPVUrsxvrVdV9ZgP4cbDLMtwsPqgXGV1s+XxnPdJ67k9PdhYWCofXKUOyt+tv37V11abWf4raxktTIp8sJs+MFrVX7m2SPFE8vXkfm112PTTY4OKG1drFRbPjts3uRv1ZZQ8RdOWvnH0VlpL4tb+127tlteRYmSSzXvX5otIUKx2Za9W7e5dW7Vk1mJdYtWQ1VbUlhQLlsezdtWVe3aS9PHxzTS8D+IRVW1GSwVqmBCWdz8/F6pseI/Di3ebk4NoptVfPbGqL1q5/wCqk4g9NtcLdj8rkq3FerbWP7ttmml0bry364zmumwcjS9iqeZ9kea457wy3DBTbiKqMhVm5YK2+yn5dv11X3a6zCfHDh2ZNV/I8xdtl2XVdvb8vj2zazcokZGTaQzVXChEax/MYtts1TbfZdpVBa6og0syUepbzNWUWfFl+uyt7ZHbtx93tQ6R1OzBfy/xXvzs1e3+LLtqyzpcjHpvpQORVevLCxbP1Vmx9dtlXZvc0xP6DzC1ZrBVxorWbr5JZl1/Zu1o+nN/oXGJncNUvoMla/7tX6/XWajlmr8UuNjFGdbXUFe4U+Z28d2yq3tmP1HpRV3tsXlg2zI3cvDLss3Hycatcs1XK1iOBS/xvXu2lXJyhcqBi6kdoVa9k+Wq+7b2tr3R2cc8/bo+iYuNk4/LCtW1Cp8WVdvbMXLseq8LkLatqsEKLpolXxWpf/5ZpV6NknDYWCstjnuKr8SrdrTo/EbLfWtnpbQE5Do2r1fVrWmJ7wrl/FIF+tikgkADVdfSUT07IqdVvsBUopDP7WT9Zb6nW6sQ1bL6DnUPqgb2/wD490pHMNtfk2EtbUOa7FZ2Zh/0m7tVWVh6TlOvN6t/wx67XZU+IW5epiyfss7W+xaVdrGVUA9Wdp814WS62KVYgjtDK3co+PdN1+r5OSRW91ln6uztPThn08PJN9vQeo9d/rXavHBFK+hs+MXxc6V9PyRYPxWGCfL3L7vrs0i8LdPCqvIKsPs3mWsf1q9qzbycCvIS6uyvmkrwysdmX/L7Tsh4PhYz5AdFBDH0Go7UX6yl1HEbGsatp3uNg14NzUL6AH3P7mmP4ywC9ysvqdJ5bn8tPRJ8XM0Z5T14BMsJkA+rEAk7BmmS68Eg/wARyNxwZSXVV5CNUAGJJPtaVT6Srgc6+o4lridMNoutgQiRRKQOI7iKPSEAhE5hzAxMKxU5ZgSx/E2hfkKrUsTSp0sKKurMdW07vj2tGeGuli7JQWkeTVze/wBdK5bzcg5ORba5Cm1zYfqp+Kzz5V6+JQTpqEMxIAA5Cqfd7dWZvis6bwXjtiY2fk/zag6cn6m33POeyawFQ8Krn1CqdmcbN3fr3dvdNk5BrxcQAgKLnJZW7lOzSd1XW1fJsUMqISKK2atLLPj+zLr9pHVhtbWpUgMWKI1Qdnus2X+1J8To2TYayv8AbrLowbLXWnmxl1adP0itcJbmptVmLohyfayvZV/dqx6v193mTDbm+uYHkeULOFuFoD0qzslH+X2+WqzuMvFKU4liAlqmDFVZ1ZRsrL2v3e1mXZu1ZyninMx66XptCtcKhUgr91ViM21zffZflKXQ/EFZvxLrcp6Fq9HVBt6fJal/aVrpm+3SZPhMA3X1ZQWpHLKyK/8AUyXp/SrKFa+s2L/FnVM/4j9V+0Oof8QK2LmsooAcBsbG/lu6ru/WYGf4tysktXSrmu5ix/q+73SXSXJa8V10dPycPy7HYqdrMnJ9zlvktU7ToHiNsu9MT+nZa1Tlcz5D5M7J8UnmeZ0alsa3Juy7HyDbolfl+5Pja0i8LYmdkXjFx8l6yw4Pd/E1lleq599TsjvkMdjXafLrsrbi1vKVmbbX3LOe6r1rArpKg+XeWDN8nY17KyzJyPD1nPUa7eoXMcUBQ69tVpX3VSlidOoQnzajYVOzZlTPboO3X5at3LrM+KpgyvEObfdxYawtTKloV2RmT/0KzbNrOvqIuxEBA4KFhs05rNNrJezVLWrljsyuyc6r/aq+LNr2zW6PcXwFJPKhWSL6c+TDVch1OnUoVHaV2DfFvtNDp3UypqRlFlbABqfk8d1Oktjj+Srbf/Sc3azao687D1DBu5Zc1Y43quuozK8a9bMc6qHDp5o20G00OtZ60+YXdjdzxqpRmNu3crK3c1TL3LOKHWOVAaoGz8+cGdWJiZuRfkE3WuWcTPB18+noXS8KhcYXMAXGSKL2rZGSpW9qrK3UelHCssFgYFlDrTXo24+NrW7dsseCLlyKnxrW5S9DWFav22rIvEORawqqyjY2HUPLZa1RXS1VZVZpCsM7vSjm047M1dRJRV2C2dr7trqqr8l2+smxugZuKazgu9b20F7EssRU7fjtM2ujztaxXYbdgRk2MlarX9vt/lsqqs9Ez8Y14l5r5sT0oZrVRXZfc36syqqt2ts01Wf/AB551Prvn2ls2u4ZirqP1s2WdR07pTBsW7JUtbnK623Ze7rVZ9ZmY3g8Z+JdlVWJXkCx3Spi/clf1m94U6kOpY4rysgNfY/C41nysX6pGSO4z7MoYLuMS17CrCp8+ury1xv1WqR9EuD2VV5QsrQub0uVe20fJrZrdc6EWJeq3XIKhciiixF/qV+NyxvROgFruWNuwXgtks7W1L8arfivb/iqzHXynjtHm4yri2rbUbLchzeFqsRdf8fl3M05Pwh0vyeoVU5Nai1LAQr+1jOx8a5FFl1WNjIzOqCpq/b5oWZXV+lV34eNk4pDZeGp86iz3Os1Em5t1HiHpCgOEQ2UBnyFors19PrU2uqzixjtarWViheSCPIsStMYatsrVM06vw51wXVUfheF5R0+Nnb/AGV//bZpn9f6LRc4sxwostG5rWt2X491Ul0489XVM8MY6GvzFBUKLLSy/wBxfqrThevYLO9lqAFR6lQCrL9W122noNmYnT8Vm4BsbhTS/wDlqrfVte7Zu1mnM4xFRc3rw9psVmYOzL7Zk22S8lrV8BdGxrKbLH5ssPNBV/bTWyyh1TAGNZbU9TBa12dWsdXuDe239q5V6BmPg38KSF5ISxVZ/d7qvr3Kus7vq+Pj59NSZDCi6ocrk2dyc9rNT/i0E3hk5LpdLM9oap/6ipV7E/12XXtmX4vsWyx+B6C3kq1k1+l4NlPDKCpDbFUKNt7dVVtu6Q5N1ebkubQa6W7ntqXzFU/K3aFe8ml4d6HimhzUGNjejW2M6p5X7L+rqsx66/Ia0XLYvl2crjVaMz2fJbW9y9vdLXhnOsoYYhasgEhW8tFS5fszfWXPEOMHdbce0rYOKu6zV71b23fVdlmJlsyQYVvlUZZDel+MQrovaw81e2cfhdbvx0yKa/Wm3lCs6Si400vW5C8nywydzIFZpl9Or8stW6Lxbw6uwTt+3b8u2bKzVzqobrcrV7S5KqF1T2rWsq5+PzX5yegUhCrdzMe6dD4gpNLmwOVx7kNbLiBGVT/0vr9WnOXgNUxBIPYDr8j3bSsPaM7NIcTIAZSABywBTies+DelMELKtbA/jzQ6tPG8QEOhAJAIJVflPe/CVINa6XKo41Ksr7r/AOpZ6cHhzbFGO6g/1F+q+414y+Xt/l7mjbbNwBWAlI7T2+6XHx0PG581x6BFV1WUut5i41N178Fal9qntb61LOqHmXiFuMm0j0O0moy62ux1vCiuwaF39qCYZue2y3dgzBgxdG2VjYu2u3ybu1kvXKATSAQNp4c/s92H0YvjKmlMq/yP/DJmAJvdZ6RbR6Ov/cMsxcSnZgJ1w7cr7bGMpVQDJI0Djgf6dsUmd56ee+xCEBAfGmOjIATAGIRACBf6Y2mPlMvoz2rUT/2md5xW1fwRsexhyIsJ4/17MPqu5tQSqoL+TxbsfU8+bLODQLMxcVj/AGmY+v8AMIRPQ6JrmVtSS+tS6+ed1Xihj7ZyPUuuvaaK60Wriqv+7X62eq93d/3hCbgKtGGnltyOWbjvP5m54X6dQhvFtQt1ccGw8ccQhKra1M3pv9NhV2LYSt+W9PkMo0rIHPmr+0yMLONS21qi+h0FnyBJYb//ABiQkO2P1dR/w66TVmX2G8bLUguFXx5Eo+Ec0V51z6cscoV81u1fADf9okJsZm6HrKjHqqyKe2/LstqssPqCO74zlaeo2LTksgrVLgKnoSlQrAKvrCEhWHo3qtflXCpSfLTy+3k+u35MPDH/AIOXX8d3hCVPSeRVdOy31+KzmNByo/eEJfG8vJ7X+n9NS1RtyCb/AMiOfFXmkfcjmLCbk6YrnRcxsa7JRPZWxyVU/Gxfw07PxWwFeNlBBtkqq2VfFxCE5Vk9rXhnym821am2CL25FgtGn/S9o7ZieMsuwG+oMfKqyR05q/4vG3Pmv+0WEYq/0hPULOnrWqEWVsHC02r21MuvDr/3mPlucG7Eaj0N2PXa/wD7ws3J5hCa65/V6wmHVlVJZkJvaAuR5i8IS3/0Eg6p1L+mw7rcatanCmw8Hnfu/BhCHmeb9LzFSlrTUGsuO6szt/7Pxt6JI7HKjHI4U2oedF1+35+0ISa9uH1MutODbY1X/huVDYzeyz/4zrvFHXbaKcNqkrW22w7XhO5vSswhKccvs5rxVe39Zk1flKHK9/cbgW54f/WSDItNYuNrDlPKNaduw149TFhJejj9IL8UPRQjEne4KH/mod3tmt4Iv/qxZReAyodQ388QhDnzIDlBEy2Fa8Y2V/TKi9oblePMP7TNwcUOK7mYl3XYh+4cwhNq+D22W6AluPZb5jq2Jj/1Kj8ixvN+UjW/z8M5jqPNqCtoPa5P5JiQmOXJ92N1RNAvqSbD+T+F5bn0EsYXTy3otpRq/wC4toUFhx/EISXbj+uR/WrhYK004HBXuO5Hdzz6zlOo/wBpeB68HnkwhLw9vJkq4zasCPi6kf8Abunu3Q305OqkOC5Qj05MWE9ODy5OrxqxYPUcD/QTgP8AjG/CYA/cwhOufpDh0bX+mrAXU4/9QxC8NY/d6kx3ib20whPDfb28f1YlOS+5RnLIo9rGNoqCluIQnXBy5DzCEJ6HnJFEIQFMSEICCKIQgf/Z" 
+                 alt="Salah ad-Din Al-Ayyubi Portrait" 
+                 class="w-full h-full object-cover object-[center_20%] opacity-95 transform hover:scale-105 transition duration-500"
+                 id="saladin-user-img">
+            <div class="absolute bottom-2 left-4 z-20 text-left">
+              <span class="text-[11px] font-bold tracking-widest uppercase text-amber-300 bg-black/70 px-2.5 py-1 rounded-md">
+                <i class="fa-solid fa-shield-halved mr-1"></i> Salah ad-Din Al-Ayyubi
+              </span>
+            </div>
+          </div>
+
+          
+          <!-- Winners / Correct Guessers List green Saladin Image -->
+          <div id="slide11-winners-section" class="mb-5 text-left bg-slate-950/80 border border-emerald-400/40 rounded-2xl p-4">
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-trophy text-amber-400"></i>
+                <span>Champions Who Guessed Correctly:</span>
+              </span>
+              <span id="slide11-winners-count" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">0</span>
+            </div>
+            <div id="slide11-winners-list" class="flex flex-wrap gap-2 max-h-28 overflow-y-auto">
+              <span class="text-xs text-slate-400 italic">No correct guesses recorded yet.</span>
+            </div>
+          </div>
+
+          <p class="text-sm sm:text-base text-slate-200 font-medium max-w-xl mx-auto leading-relaxed mb-6">
+            An eternal symbol of historical justice, courage, and chivalry.
+          </p>
+
+          <button onclick="resetPresentation()"
+            class="px-5 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-bold uppercase tracking-wider transition cursor-pointer">
+            <i class="fa-solid fa-rotate-left mr-1.5"></i> Replay Challenge Presentation
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <footer class="fixed bottom-0 left-0 right-0 z-40 px-6 py-4 flex items-center justify-between pointer-events-none">
+    <div class="text-xs text-slate-500 hidden sm:block">
+      Use <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">←</kbd>
+      <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">→</kbd>
+      or Spacebar to navigate
+    </div>
+
+    <div class="flex items-center gap-3 mx-auto sm:mx-0 pointer-events-auto">
+      <button id="prev-btn" onclick="prevSlide()"
+        class="px-5 py-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 disabled:opacity-35 disabled:pointer-events-none border border-slate-700 text-white font-bold text-sm flex items-center gap-2 transition cursor-pointer shadow-lg">
+        <i class="fa-solid fa-chevron-left"></i>
+        <span>Previous</span>
+      </button>
+
+      <button id="next-btn" onclick="nextSlide()"
+        class="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-35 disabled:pointer-events-none text-slate-950 font-extrabold text-sm flex items-center gap-2 transition cursor-pointer shadow-lg shadow-amber-500/20">
+        <span>Next</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Participants & Choices Modal -->
+  <div id="participants-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="glass-gold rounded-3xl max-w-2xl w-full p-6 sm:p-8 max-h-[85vh] flex flex-col border-2 border-amber-400/60 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-700/80 pb-4 mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div>
+            <h3 id="modal-q-title" class="text-xl sm:text-2xl font-black text-white">Submissions & Choices</h3>
+            <span id="sync-status-badge" class="text-[11px] text-emerald-400 font-bold"><i class="fa-solid fa-circle text-[8px] mr-1 animate-pulse"></i> Connected live to receive votes</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="clearQuestionVotes()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-600 cursor-pointer">
+            Clear List
+          </button>
+          <button onclick="closeParticipantsModal()" class="w-9 h-9 rounded-xl bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 flex items-center justify-center font-bold cursor-pointer">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Counters -->
+      <div id="modal-summary-box" class="grid grid-cols-2 gap-3 mb-4">
+        <div class="rounded-2xl bg-emerald-500/15 border border-emerald-400/30 p-3 text-center">
+          <span class="text-xs text-emerald-300 font-bold block" id="opt1-label">Yes Submissions</span>
+          <span id="opt1-total" class="font-display text-2xl font-black text-white">0</span>
+        </div>
+        <div class="rounded-2xl bg-amber-500/15 border border-amber-400/30 p-3 text-center">
+          <span class="text-xs text-amber-300 font-bold block" id="opt2-label">No Submissions</span>
+          <span id="opt2-total" class="font-display text-2xl font-black text-white">0</span>
+        </div>
+      </div>
+
+      <!-- Participants Cards Grid -->
+      <div id="participants-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto pr-1 flex-1">
+      </div>
+    </div>
+  </div>
+
+  <!-- Local File Warning Banner -->
+  <div id="local-file-banner" class="fixed bottom-16 left-1/2 -translate-x-1/2 z-40 hidden max-w-xl w-[92%] bg-slate-900/95 border border-amber-400/50 rounded-2xl px-4 py-2.5 shadow-xl text-xs text-slate-200 flex items-center justify-between gap-3">
+    <div>
+      <span class="text-amber-400 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Notice:</span>
+      You are opening from <code class="text-amber-300">file://</code>. Upload to <a href="https://app.netlify.com/drop" target="_blank" class="underline text-emerald-400 font-bold">Netlify Drop</a> or GitHub Pages for real-time mobile voting!
+    </div>
+    <button onclick="document.getElementById('local-file-banner').style.display='none'" class="text-slate-400 hover:text-white font-bold px-2 cursor-pointer">✕</button>
+  </div>
+
+  <!-- Audience Mobile Voting Screen -->
+  <div id="audience-vote-screen" class="fixed inset-0 z-50 hidden flex-col items-center justify-center p-5" style="background: radial-gradient(circle at 50% 20%, #162238 0%, #070d19 100%);">
+    <div class="glass-gold rounded-3xl max-w-md w-full p-7 sm:p-9 text-center border-2 border-amber-400/50 shadow-2xl">
+      <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400 flex items-center justify-center mx-auto mb-4">
+        <i class="fa-solid fa-hand-pointer text-3xl text-amber-400"></i>
+      </div>
+      <span class="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 text-xs font-extrabold tracking-widest uppercase" id="audience-badge-title">
+        Live Audience Interaction
+      </span>
+      <h2 id="audience-q-text" class="text-xl sm:text-2xl font-black text-white mt-3 mb-5 leading-snug">
+        Does any of you like any of these hobbies?
+      </h2>
+
+      <!-- Q1 Mobile Form -->
+      <div id="form-q1" class="hidden flex-col gap-4">
+        <div id="audience-step-choice" class="flex flex-col gap-3">
+          <p class="text-xs text-slate-300 mb-1">Select your answer:</p>
+          <button onclick="selectQ1Choice('Yes')"
+            class="w-full py-4 px-5 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/35 border-2 border-emerald-400 text-white font-extrabold text-base transition flex items-center justify-center gap-3 cursor-pointer">
+            <span>Yes</span>
+          </button>
+          <button onclick="selectQ1Choice('No')"
+            class="w-full py-4 px-5 rounded-2xl bg-amber-500/20 hover:bg-amber-500/35 border-2 border-amber-400 text-white font-extrabold text-base transition flex items-center justify-center gap-3 cursor-pointer">
+            <span>No</span>
+          </button>
+        </div>
+
+        <div id="audience-step-details" class="hidden flex-col gap-4 text-left">
+          <div class="p-2.5 rounded-xl bg-slate-900/90 border border-amber-400/40">
+            <span class="text-xs text-slate-400">Your choice: <strong id="q1-choice-preview" class="text-amber-300"></strong></span>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-200 mb-1">Your Name:</label>
+            <input id="q1-name-input" type="text" placeholder="Enter your name..."
+              class="w-full px-3.5 py-3 rounded-xl bg-slate-950 border-2 border-amber-400/60 text-white text-sm font-bold focus:outline-none" style="user-select: text;">
+          </div>
+          <!-- If Yes: Dropdown of personal hobbies -->
+          <div id="q1-yes-field" class="hidden flex-col gap-1">
+            <label class="block text-xs font-bold text-slate-200 mb-1">Choose a personal hobby:</label>
+            <select id="q1-hobby-select" class="w-full px-3.5 py-3 rounded-xl bg-slate-950 border-2 border-amber-400/60 text-white text-sm font-bold focus:outline-none cursor-pointer">
+              <option value="Sciences">Sciences</option>
+              <option value="Religious Studies">Religious Studies</option>
+              <option value="Poetry">Poetry</option>
+              <option value="Literature">Literature</option>
+              <option value="Leaders' Biographies">Leaders' Biographies</option>
+            </select>
+          </div>
+          <!-- If No: Input for other hobby -->
+          <div id="q1-no-field" class="hidden flex-col gap-1">
+            <label class="block text-xs font-bold text-slate-200 mb-1">Enter your other favorite hobby:</label>
+            <input id="q1-other-hobby-input" type="text" placeholder="e.g. Football, Drawing..."
+              class="w-full px-3.5 py-3 rounded-xl bg-slate-950 border-2 border-amber-400/60 text-white text-sm font-bold focus:outline-none" style="user-select: text;">
+          </div>
+          <div class="flex gap-2 mt-2">
+            <button onclick="backToQ1Choice()" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs cursor-pointer">Back</button>
+            <button onclick="submitQ1Vote()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm shadow-lg cursor-pointer">
+              Submit Vote 🚀
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <!-- Q2 Mobile Form (Slide 5 Poll) -->
+      <div id="form-q2" class="hidden flex-col gap-4 text-left">
+        <div>
+          <label class="block text-xs font-bold text-slate-200 mb-1">Your Name:</label>
+          <input id="q2-name-input" type="text" placeholder="Enter your name..."
+            class="w-full px-3.5 py-3 rounded-xl bg-slate-950 border-2 border-emerald-400/60 text-white text-sm font-bold focus:outline-none mb-3" style="user-select: text;">
+          <label class="block text-xs font-bold text-slate-200 mb-2">Choose your answer:</label>
+          <div class="flex flex-col gap-2.5">
+            <button onclick="submitQ2Vote('Yes, I wish so!')"
+              class="w-full py-3.5 px-4 rounded-xl bg-amber-500/20 hover:bg-amber-500/35 border-2 border-amber-400 text-white font-extrabold text-sm transition flex items-center justify-center gap-2 cursor-pointer">
+              <span>🙋‍♂️ Yes, I wish so!</span>
+            </button>
+            <button onclick="submitQ2Vote('Maybe one day!')"
+              class="w-full py-3.5 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border-2 border-emerald-400 text-white font-extrabold text-sm transition flex items-center justify-center gap-2 cursor-pointer">
+              <span>😂NO NO NO!</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q10 Guessing Form -->
+      <div id="form-q10" class="hidden flex-col gap-4 text-left">
+        <div>
+          <label class="block text-xs font-bold text-slate-200 mb-1">Your Name:</label>
+          <input id="q10-name-input" type="text" placeholder="Enter your name..."
+            class="w-full px-3.5 py-3 rounded-xl bg-slate-950 border-2 border-amber-400/60 text-white text-sm font-bold focus:outline-none mb-3" style="user-select: text;">
+          <label class="block text-xs font-bold text-slate-200 mb-1">Who is the leader you guessed?</label>
+          <input id="q10-guess-input" type="text" placeholder="Type your guess here..."
+            class="w-full px-3.5 py-3 rounded-xl bg-slate-950 border-2 border-amber-400/60 text-white text-sm font-bold focus:outline-none" style="user-select: text;">
+        </div>
+        <button onclick="submitQ10Guess()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm shadow-lg cursor-pointer mt-2">
+          Submit Guess 🚀
+        </button>
+      </div>
+
+      <!-- Success Done State -->
+      <div id="audience-step-done" class="hidden flex-col items-center gap-3 mt-2">
+        <div class="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-3xl text-emerald-400">
+          ✓
+        </div>
+        <h3 class="text-xl font-black text-emerald-300">Submitted successfully!</h3>
+        <p class="text-sm text-slate-300">Check the main display screen for live updates.</p>
+        <button onclick="resetAudienceScreen()" class="mt-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-bold cursor-pointer">
+          Submit another response
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const totalSlides = 11;
+    let currentSlide = 1;
+    let votes = { yes: 0, maybe: 0 };
+    let regionTimers = [];
+
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress-bar');
+    const slideCounter = document.getElementById('slide-counter');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    function updateSlide(index) {
+      if (index < 1 || index > totalSlides) return;
+      currentSlide = index;
+
+      closeSpotlight();
+
+      slides.forEach((slide, idx) => {
+        if (idx + 1 === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      const pct = (currentSlide / totalSlides) * 100;
+      progressBar.style.width = `${pct}%`;
+      slideCounter.textContent = `${currentSlide} / ${totalSlides}`;
+
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+
+      if (currentSlide === 6) {
+        animateRegions();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        updateSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        updateSlide(currentSlide - 1);
+      }
+    }
+
+    function toggleSpotlight(elementId) {
+      const el = document.getElementById(elementId);
+      const dimmer = document.getElementById('spotlight-dimmer');
+      if (!el.classList.contains('highlighted')) {
+        el.classList.add('highlighted');
+        dimmer.classList.add('active');
+      } else {
+        closeSpotlight();
+      }
+    }
+
+    function closeSpotlight() {
+      document.querySelectorAll('.spotlight-box').forEach(b => b.classList.remove('highlighted'));
+      document.getElementById('spotlight-dimmer').classList.remove('active');
+    }
+
+    function castVote(type) {
+      votes[type]++;
+      if (type === 'yes') {
+        document.getElementById('vote-yes-count').textContent = `${votes.yes} votes`;
+      } else {
+        document.getElementById('vote-maybe-count').textContent = `${votes.maybe} votes`;
+      }
+    }
+
+    function animateRegions() {
+      regionTimers.forEach(t => clearTimeout(t));
+      regionTimers = [];
+      const nodes = document.querySelectorAll('.region-node');
+      nodes.forEach(n => {
+        n.classList.remove('lit');
+        const flagBox = n.querySelector('.flag-container');
+        if (flagBox) {
+          flagBox.style.transform = 'scale(0)';
+          flagBox.style.opacity = '0';
+        }
+      });
+
+      nodes.forEach((node, i) => {
+        const timer = setTimeout(() => {
+          node.classList.add('lit');
+        }, 350 + i * 320);
+        regionTimers.push(timer);
+      });
+    }
+
+    function toggleFlag(cardElement) {
+      const flagBox = cardElement.querySelector('.flag-container');
+      if (flagBox) {
+        const isShown = flagBox.style.opacity === '1';
+        if (isShown) {
+          flagBox.style.transform = 'scale(0)';
+          flagBox.style.opacity = '0';
+        } else {
+          flagBox.style.transform = 'scale(1)';
+          flagBox.style.opacity = '1';
+        }
+      }
+    }
+
+    function replayRegions() {
+      animateRegions();
+    }
+
+    function startKahootReveal() {
+      const overlay = document.getElementById('countdown-overlay');
+      const numEl = document.getElementById('countdown-num');
+      overlay.classList.add('active');
+
+      let count = 3;
+      numEl.textContent = count;
+
+      const timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+          numEl.textContent = count;
+        } else {
+          clearInterval(timer);
+          overlay.classList.remove('active');
+          triggerGrandReveal();
+        }
+      }, 900);
+    }
+
+    function triggerGrandReveal() {
+      const slide11 = document.getElementById('slide-11');
+      const flash = document.getElementById('light-flash');
+
+      flash.classList.remove('trigger');
+      void flash.offsetWidth;
+      flash.classList.add('trigger');
+
+      slide11.classList.add('revealed');
+      launchGoldenParticles();
+    }
+
+    function resetPresentation() {
+      const slide11 = document.getElementById('slide-11');
+      slide11.classList.remove('revealed');
+      votes = { yes: 0, maybe: 0 };
+      document.getElementById('vote-yes-count').textContent = '0 votes';
+      document.getElementById('vote-maybe-count').textContent = '0 votes';
+      closeSpotlight();
+      updateSlide(1);
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        if (currentSlide === 11 && !document.getElementById('slide-11').classList.contains('revealed')) {
+          startKahootReveal();
+        } else {
+          nextSlide();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) nextSlide();
+        else prevSlide();
+      }
+    }, { passive: true });
+
+    function launchGoldenParticles() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#fbbf24', '#f59e0b', '#fde68a', '#10b981', '#ffffff'];
+
+      for (let i = 0; i < 110; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 18,
+          vy: (Math.random() - 0.65) * 18,
+          size: Math.random() * 6 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+          decay: Math.random() * 0.015 + 0.008
+        });
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+
+        particles.forEach(p => {
+          if (p.alpha > 0) {
+            active = true;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.25;
+            p.vx *= 0.98;
+            p.alpha -= p.decay;
+
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.alpha);
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        });
+
+        if (active) {
+          requestAnimationFrame(animateParticles);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      animateParticles();
+    }
+
+    updateSlide(1);
+
+    // =========================================================
+    // REAL-TIME MULTI-QUESTION AUDIENCE VOTING & SYNC
+    // =========================================================
+    function getRoomId() {
+      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      if (hashParams.get('room')) return hashParams.get('room');
+      let savedRoom = localStorage.getItem('saladin_room_id');
+      if (!savedRoom) {
+        savedRoom = 'saladin_' + Math.random().toString(36).substring(2, 9);
+        localStorage.setItem('saladin_room_id', savedRoom);
+      }
+      return savedRoom;
+    }
+
+    const ROOM_ID = getRoomId();
+    const MQTT_TOPIC = 'saladin_quiz_live/' + ROOM_ID;
+    let mqttClient = null;
+    let activeModalQ = 'q1';
+    let selectedQ1Choice = '';
+
+    function buildShareUrl(qId) {
+      const base = window.location.href.split('#')[0].split('?')[0];
+      return `${base}#vote=${qId}&room=${ROOM_ID}`;
+    }
+
+    function getStoredVotes(qId) {
+      try {
+        return JSON.parse(localStorage.getItem(`saladin_live_${ROOM_ID}_${qId}`) || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveVoteRecord(qId, record) {
+      const list = getStoredVotes(qId);
+      const existingIdx = list.findIndex(item => item.name.trim().toLowerCase() === record.name.trim().toLowerCase());
+      if (existingIdx >= 0) {
+        list[existingIdx] = record;
+      } else {
+        list.push(record);
+      }
+      localStorage.setItem(`saladin_live_${ROOM_ID}_${qId}`, JSON.stringify(list));
+      updateAllVoteUI();
+    }
+
+    function updateAllVoteUI() {
+      const q1List = getStoredVotes('q1');
+      const q2List = getStoredVotes('q2');
+      const q10List = getStoredVotes('q10');
+
+      const b1 = document.getElementById('badge-q1');
+      const b2 = document.getElementById('badge-q2');
+      const b10 = document.getElementById('badge-q10');
+      if (b1) b1.textContent = q1List.length;
+      if (b2) b2.textContent = q2List.length;
+      if (b10) b10.textContent = q10List.length;
+
+      // Update Slide 5 vote counters from remote participants + local clicks
+      const remoteYes = q2List.filter(v => v.choice === 'Yes, I wish so!').length;
+      const remoteMaybe = q2List.filter(v => v.choice === 'Maybe one day!').length;
+      const yesEl = document.getElementById('vote-yes-count');
+      const maybeEl = document.getElementById('vote-maybe-count');
+      if (yesEl) yesEl.textContent = `${votes.yes + remoteYes} votes`;
+      if (maybeEl) maybeEl.textContent = `${votes.maybe + remoteMaybe} votes`;
+
+      // Update Slide 11 Winners List (Only Correct Guessers!)
+      renderSlide11Winners(q10List);
+
+      const modal = document.getElementById('participants-modal');
+      if (modal && !modal.classList.contains('hidden')) {
+        renderParticipantsList(activeModalQ);
+      }
+    }
+
+    function renderSlide11Winners(q10List) {
+      const winnersContainer = document.getElementById('slide11-winners-list');
+      const countBadge = document.getElementById('slide11-winners-count');
+      if (!winnersContainer || !countBadge) return;
+
+      const correctGuessers = q10List.filter(item => item.isCorrect === true);
+      countBadge.textContent = correctGuessers.length;
+
+      if (correctGuessers.length === 0) {
+        winnersContainer.innerHTML = `<span class="text-xs text-slate-400 italic">No correct guesses recorded yet.</span>`;
+        return;
+      }
+
+      winnersContainer.innerHTML = correctGuessers.map(w => `
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-400/50 text-xs shadow">
+          <i class="fa-solid fa-circle-check text-emerald-400"></i>
+          <span class="font-extrabold text-white">${escapeHtml(w.name)}</span>
+          <span class="text-amber-300 font-semibold">(${escapeHtml(w.guess)})</span>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function initRealtimeSync() {
+      if (typeof mqtt === 'undefined') return;
+      try {
+        mqttClient = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
+          clientId: 'client_' + Math.random().toString(16).substr(2, 8),
+          clean: true,
+          connectTimeout: 5000
+        });
+        mqttClient.on('connect', () => {
+          mqttClient.subscribe(MQTT_TOPIC);
+          const badge = document.getElementById('sync-status-badge');
+          if (badge) badge.innerHTML = '<i class="fa-solid fa-circle text-[8px] mr-1 text-emerald-400 animate-pulse"></i> Connected to cloud';
+        });
+        mqttClient.on('message', (topic, message) => {
+          if (topic === MQTT_TOPIC) {
+            try {
+              const payload = JSON.parse(message.toString());
+              if (payload && payload.qId && payload.name) {
+                saveVoteRecord(payload.qId, payload);
+              }
+            } catch (err) {}
+          }
+        });
+      } catch (e) {}
+    }
+
+    window.addEventListener('storage', (e) => {
+      if (e.key && e.key.startsWith(`saladin_live_${ROOM_ID}_`)) {
+        updateAllVoteUI();
+      }
+    });
+
+    function parseHashRoute() {
+      const hash = window.location.hash.replace(/^#/, '');
+      const params = new URLSearchParams(hash);
+      return params.get('vote'); // 'q1', 'q2', 'q10' or null
+    }
+
+    function setupMode() {
+      const voteQ = parseHashRoute();
+      const voteScreen = document.getElementById('audience-vote-screen');
+      if (voteQ && (voteQ === 'q1' || voteQ === 'q2' || voteQ === 'q10')) {
+        voteScreen.classList.remove('hidden');
+        voteScreen.classList.add('flex');
+        
+        ['form-q1', 'form-q2', 'form-q10', 'audience-step-done'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+          }
+        });
+
+        if (voteQ === 'q1') {
+          document.getElementById('audience-badge-title').textContent = 'Live Hobbies Poll';
+          document.getElementById('audience-q-text').textContent = 'Does any of you like any of these hobbies?';
+          document.getElementById('form-q1').classList.remove('hidden');
+          document.getElementById('form-q1').classList.add('flex');
+          resetQ1Form();
+        } else if (voteQ === 'q2') {
+          document.getElementById('audience-badge-title').textContent = 'Slide 5 Live Audience Poll';
+          document.getElementById('audience-q-text').textContent = 'Does anyone among you aspire to rule Egypt in the future?';
+          document.getElementById('form-q2').classList.remove('hidden');
+          document.getElementById('form-q2').classList.add('flex');
+          document.getElementById('q2-name-input').value = '';
+        } else if (voteQ === 'q10') {
+          document.getElementById('audience-badge-title').textContent = 'Leader Guess Challenge';
+          document.getElementById('audience-q-text').textContent = 'Who is this legendary leader? Enter your guess!';
+          document.getElementById('form-q10').classList.remove('hidden');
+          document.getElementById('form-q10').classList.add('flex');
+          document.getElementById('q10-name-input').value = '';
+          document.getElementById('q10-guess-input').value = '';
+        }
+      } else {
+        voteScreen.classList.add('hidden');
+        voteScreen.classList.remove('flex');
+
+        if (window.location.protocol === 'file:') {
+          document.getElementById('local-file-banner').classList.remove('hidden');
+        }
+
+        ['q1', 'q2', 'q10'].forEach(qId => {
+          const url = buildShareUrl(qId);
+          const linkEl = document.getElementById(`link-${qId}`);
+          const qrEl = document.getElementById(`qr-${qId}`);
+          if (linkEl) {
+            linkEl.href = url;
+            linkEl.textContent = url;
+          }
+          if (qrEl && typeof QRCode !== 'undefined') {
+            qrEl.innerHTML = '';
+            new QRCode(qrEl, {
+              text: url,
+              width: 84,
+              height: 84,
+              colorDark: '#070d19',
+              colorLight: '#ffffff',
+              correctLevel: QRCode.CorrectLevel.M
+            });
+          }
+        });
+        updateAllVoteUI();
+      }
+    }
+
+    window.addEventListener('hashchange', setupMode);
+
+    function selectQ1Choice(choice) {
+      selectedQ1Choice = choice;
+      document.getElementById('q1-choice-preview').textContent = choice;
+      document.getElementById('audience-step-choice').classList.add('hidden');
+      document.getElementById('audience-step-details').classList.remove('hidden');
+      document.getElementById('audience-step-details').classList.add('flex');
+
+      if (choice === 'Yes') {
+        document.getElementById('q1-yes-field').classList.remove('hidden');
+        document.getElementById('q1-yes-field').classList.add('flex');
+        document.getElementById('q1-no-field').classList.add('hidden');
+        document.getElementById('q1-no-field').classList.remove('flex');
+      } else {
+        document.getElementById('q1-no-field').classList.remove('hidden');
+        document.getElementById('q1-no-field').classList.add('flex');
+        document.getElementById('q1-yes-field').classList.add('hidden');
+        document.getElementById('q1-yes-field').classList.remove('flex');
+      }
+      setTimeout(() => document.getElementById('q1-name-input').focus(), 100);
+    }
+
+    function backToQ1Choice() {
+      document.getElementById('audience-step-details').classList.add('hidden');
+      document.getElementById('audience-step-details').classList.remove('flex');
+      document.getElementById('audience-step-choice').classList.remove('hidden');
+    }
+
+    function resetQ1Form() {
+      selectedQ1Choice = '';
+      document.getElementById('q1-name-input').value = '';
+      document.getElementById('q1-other-hobby-input').value = '';
+      document.getElementById('audience-step-details').classList.add('hidden');
+      document.getElementById('audience-step-details').classList.remove('flex');
+      document.getElementById('audience-step-choice').classList.remove('hidden');
+    }
+
+    function submitQ1Vote() {
+      const name = document.getElementById('q1-name-input').value.trim();
+      if (!name) {
+        alert('Please enter your name first!');
+        document.getElementById('q1-name-input').focus();
+        return;
+      }
+      let hobbyVal = '';
+      if (selectedQ1Choice === 'Yes') {
+        hobbyVal = document.getElementById('q1-hobby-select').value;
+      } else {
+        hobbyVal = document.getElementById('q1-other-hobby-input').value.trim();
+        if (!hobbyVal) {
+          alert('Please enter your favorite hobby!');
+          document.getElementById('q1-other-hobby-input').focus();
+          return;
+        }
+      }
+
+      const record = {
+        qId: 'q1',
+        name: name,
+        choice: selectedQ1Choice,
+        hobby: hobbyVal,
+        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+      };
+      saveVoteRecord('q1', record);
+      if (mqttClient && mqttClient.connected) {
+        mqttClient.publish(MQTT_TOPIC, JSON.stringify(record));
+      }
+      showDoneState();
+    }
+
+    function submitQ2Vote(choiceLabel) {
+      const name = document.getElementById('q2-name-input').value.trim();
+      if (!name) {
+        alert('Please enter your name first!');
+        document.getElementById('q2-name-input').focus();
+        return;
+      }
+      const record = {
+        qId: 'q2',
+        name: name,
+        choice: choiceLabel,
+        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+      };
+      saveVoteRecord('q2', record);
+      if (mqttClient && mqttClient.connected) {
+        mqttClient.publish(MQTT_TOPIC, JSON.stringify(record));
+      }
+      showDoneState();
+    }
+
+    function checkSaladinMatch(rawGuess) {
+      // Normalize Arabic & English text so any valid spelling of Saladin / صلاح الدين is recognized
+      const normalized = rawGuess
+        .toLowerCase()
+        .replace(/[أإآ]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        .replace(/[^a-zء-ي]/g, '');
+
+      const validKeywords = [
+        'saladin',
+        'saladdin',
+        'salahaddin',
+        'salahaldin',
+        'salaheddin',
+        'salahuddin',
+        'صلاحالدين',
+        'صلاحالدينالايوبي'
+        'saladen'
+        'salahden'
+      ];
+
+      return validKeywords.some(kw => normalized.includes(kw));
+    }
+
+    function submitQ10Guess() {
+      const name = document.getElementById('q10-name-input').value.trim();
+      const guess = document.getElementById('q10-guess-input').value.trim();
+      if (!name) {
+        alert('Please enter your name!');
+        document.getElementById('q10-name-input').focus();
+        return;
+      }
+      if (!guess) {
+        alert('Please enter your guess!');
+        document.getElementById('q10-guess-input').focus();
+        return;
+      }
+
+      // Allow ANY guess (correct or incorrect) to be saved and recorded
+      const isCorrect = checkSaladinMatch(guess);
+
+      const record = {
+        qId: 'q10',
+        name: name,
+        guess: guess,
+        isCorrect: isCorrect,
+        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+      };
+      saveVoteRecord('q10', record);
+      if (mqttClient && mqttClient.connected) {
+        mqttClient.publish(MQTT_TOPIC, JSON.stringify(record));
+      }
+      showDoneState();
+    }
+
+    function showDoneState() {
+      ['form-q1', 'form-q2', 'form-q10'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('flex');
+        }
+      });
+      document.getElementById('audience-step-done').classList.remove('hidden');
+      document.getElementById('audience-step-done').classList.add('flex');
+    }
+
+    function resetAudienceScreen() {
+      document.getElementById('audience-step-done').classList.add('hidden');
+      document.getElementById('audience-step-done').classList.remove('flex');
+      setupMode();
+    }
+
+    function openParticipantsModal(qId) {
+      activeModalQ = qId;
+      const modal = document.getElementById('participants-modal');
+      const titleEl = document.getElementById('modal-q-title');
+      const summaryBox = document.getElementById('modal-summary-box');
+
+      if (qId === 'q1') {
+        titleEl.textContent = 'Hobbies Submissions & Choices';
+        summaryBox.style.display = 'grid';
+      } else if (qId === 'q2') {
+        titleEl.textContent = 'Rule Egypt Poll — Participants';
+        summaryBox.style.display = 'grid';
+      } else {
+        titleEl.textContent = 'All Submitted Guesses (Slide 10)';
+        summaryBox.style.display = 'grid';
+      }
+
+      renderParticipantsList(qId);
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function renderParticipantsList(qId) {
+      const list = getStoredVotes(qId);
+      const grid = document.getElementById('participants-grid');
+
+      if (qId === 'q1') {
+        const cYes = list.filter(v => v.choice === 'Yes').length;
+        const cNo = list.filter(v => v.choice === 'No').length;
+        document.getElementById('opt1-total').textContent = cYes;
+        document.getElementById('opt2-total').textContent = cNo;
+        document.getElementById('opt1-label').textContent = 'Yes Votes';
+        document.getElementById('opt2-label').textContent = 'No Votes';
+      } else if (qId === 'q2') {
+        const cYes = list.filter(v => v.choice === 'Yes, I wish so!').length;
+        const cMaybe = list.filter(v => v.choice === 'Maybe one day!').length;
+        document.getElementById('opt1-total').textContent = cYes;
+        document.getElementById('opt2-total').textContent = cMaybe;
+        document.getElementById('opt1-label').textContent = 'Yes, I wish so!';
+        document.getElementById('opt2-label').textContent = 'Maybe one day!';
+      } else {
+        const correctCount = list.filter(v => v.isCorrect).length;
+        const wrongCount = list.filter(v => !v.isCorrect).length;
+        document.getElementById('opt1-total').textContent = correctCount;
+        document.getElementById('opt2-total').textContent = wrongCount;
+        document.getElementById('opt1-label').textContent = 'Correct Guesses ✓';
+        document.getElementById('opt2-label').textContent = 'Other Guesses';
+      }
+
+      if (list.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-sm">
+          No submissions recorded yet. Scan the QR code or visit the link!
+        </div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map((item, idx) => {
+        if (qId === 'q1') {
+          const isYes = item.choice === 'Yes';
+          const badgeClass = isYes ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40' : 'bg-amber-500/20 text-amber-300 border-amber-400/40';
+          return `
+            <div class="rounded-2xl bg-slate-900/90 border border-slate-700/80 p-3.5 flex items-center justify-between gap-2 shadow">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-display font-black text-xs flex items-center justify-center flex-shrink-0">${idx + 1}</span>
+                <div class="truncate">
+                  <div class="font-extrabold text-white text-sm truncate">${escapeHtml(item.name)}</div>
+                  <div class="text-[10px] text-slate-400">Hobby: <strong class="text-amber-300">${escapeHtml(item.hobby)}</strong></div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-xl border text-xs font-bold whitespace-nowrap ${badgeClass}">${escapeHtml(item.choice)}</span>
+            </div>
+          `;
+        } else if (qId === 'q2') {
+          const isYes = item.choice === 'Yes, I wish so!';
+          const badgeClass = isYes ? 'bg-amber-500/20 text-amber-300 border-amber-400/40' : 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40';
+          return `
+            <div class="rounded-2xl bg-slate-900/90 border border-slate-700/80 p-3.5 flex items-center justify-between gap-2 shadow">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-300 font-display font-black text-xs flex items-center justify-center flex-shrink-0">${idx + 1}</span>
+                <div class="truncate">
+                  <div class="font-extrabold text-white text-sm truncate">${escapeHtml(item.name)}</div>
+                  <div class="text-[10px] text-slate-400">${escapeHtml(item.time || '')}</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-xl border text-xs font-bold whitespace-nowrap ${badgeClass}">${escapeHtml(item.choice)}</span>
+            </div>
+          `;
+        } else {
+          const isCorrect = item.isCorrect;
+          const badgeClass = isCorrect ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40' : 'bg-rose-500/20 text-rose-300 border-rose-400/40';
+          const statusText = isCorrect ? 'Correct ✓' : 'Incorrect ✗';
+          return `
+            <div class="rounded-2xl bg-slate-900/90 border border-slate-700/80 p-3.5 flex items-center justify-between gap-2 shadow">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-display font-black text-xs flex items-center justify-center flex-shrink-0">${idx + 1}</span>
+                <div class="truncate">
+                  <div class="font-extrabold text-white text-sm truncate">${escapeHtml(item.name)}</div>
+                  <div class="text-[10px] text-slate-400">Guessed: <strong class="text-amber-300">${escapeHtml(item.guess)}</strong></div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-xl border text-xs font-bold whitespace-nowrap ${badgeClass}">${statusText}</span>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    function closeParticipantsModal() {
+      const modal = document.getElementById('participants-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function clearQuestionVotes() {
+      localStorage.removeItem(`saladin_live_${ROOM_ID}_${activeModalQ}`);
+      updateAllVoteUI();
+    }
+
+    function copyVoteUrl(qId, btn) {
+      const url = buildShareUrl(qId);
+      navigator.clipboard.writeText(url).then(() => {
+        const old = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => btn.textContent = old, 1500);
+      });
+    }
+
+    function openVoteWindow(qId) {
+      window.open(buildShareUrl(qId), '_blank');
+    }
+
+    initRealtimeSync();
+    setupMode();
+  </script>
+</body>
+</html>
