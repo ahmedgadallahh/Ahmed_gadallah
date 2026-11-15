@@ -366,6 +366,37 @@
       pointer-events: none;
       z-index: 50;
     }
+  
+    /* تنسيق وضع تسليط الضوء وتكبير أسماء المشاركين داخل نافذة العرض */
+    #participants-modal.modal-spotlight-mode #modal-card-box {
+      max-width: 90vw !important;
+      width: 860px !important;
+      max-height: 94vh !important;
+      transform: scale(1.04) !important;
+      box-shadow: 0 0 100px rgba(245, 158, 11, 0.75), 0 0 50px rgba(16, 185, 129, 0.5) !important;
+      border: 3px solid #fbbf24 !important;
+      background: rgba(7, 13, 25, 0.99) !important;
+    }
+    #participants-modal.modal-spotlight-mode #participants-grid {
+      max-height: 65vh !important;
+      gap: 1rem !important;
+    }
+    #participants-modal.modal-spotlight-mode .participant-card-item {
+      padding: 1.1rem 1.25rem !important;
+      background: rgba(15, 23, 42, 0.98) !important;
+      border: 2px solid rgba(245, 158, 11, 0.4) !important;
+    }
+    #participants-modal.modal-spotlight-mode .participant-name-text {
+      font-size: 1.2rem !important;
+    }
+    #participants-modal.modal-spotlight-mode .participant-sub-text {
+      font-size: 0.95rem !important;
+    }
+    #participants-modal.modal-spotlight-mode .participant-badge-text {
+      font-size: 1rem !important;
+      padding: 0.5rem 1rem !important;
+    }
+
   </style>
   <!-- QRCode & Real-time Cross-Device Sync -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
