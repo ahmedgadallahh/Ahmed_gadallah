@@ -209,62 +209,25 @@
       border-radius: 1.75rem !important;
     }
 
+    /* تنسيق تسليط الضوء على قسم الفائزين بالشريحة 11 */
     #slide11-winners-section.winners-highlighted {
       position: relative !important;
       z-index: 50 !important;
-      transform: scale(1.06) !important;
+      transform: scale(1.05) !important;
       background: rgba(7, 13, 25, 0.99) !important;
       border: 2px solid #fbbf24 !important;
       box-shadow: 0 0 80px rgba(16, 185, 129, 0.65), 0 0 40px rgba(245, 158, 11, 0.55) !important;
-      padding: 1.5rem !important;
+      padding: 1.25rem !important;
     }
     #slide11-winners-section.winners-highlighted #slide11-winners-list {
-      max-height: 45vh !important;
+      max-height: 40vh !important;
       gap: 0.75rem !important;
     }
     #slide11-winners-section.winners-highlighted .winner-chip {
       font-size: 1.05rem !important;
-      padding: 0.65rem 1.1rem !important;
+      padding: 0.6rem 1rem !important;
       border-width: 2px !important;
       background: rgba(16, 185, 129, 0.28) !important;
-    }
-
-    #participants-modal.modal-spotlight-mode {
-      background: rgba(0, 0, 0, 0.96) !important;
-      backdrop-filter: blur(18px) !important;
-    }
-    #participants-modal.modal-spotlight-mode #modal-card-box {
-      max-width: 92vw !important;
-      width: 1100px !important;
-      border-color: #fbbf24 !important;
-      box-shadow: 0 0 90px rgba(245, 158, 11, 0.55) !important;
-      background: rgba(10, 16, 30, 0.98) !important;
-    }
-    #participants-modal.modal-spotlight-mode #modal-summary-box {
-      opacity: 0.25;
-      filter: blur(3px);
-      transition: all 0.35s ease;
-    }
-    #participants-modal.modal-spotlight-mode #participants-grid {
-      gap: 1rem !important;
-    }
-    #participants-modal.modal-spotlight-mode .participant-card-item {
-      padding: 1.15rem 1.25rem !important;
-      border-color: rgba(251, 191, 36, 0.65) !important;
-      background: rgba(30, 41, 59, 0.95) !important;
-      box-shadow: 0 0 25px rgba(245, 158, 11, 0.2) !important;
-      transform: scale(1.01);
-    }
-    #participants-modal.modal-spotlight-mode .participant-name-text {
-      font-size: 1.25rem !important;
-      line-height: 1.5 !important;
-    }
-    #participants-modal.modal-spotlight-mode .participant-sub-text {
-      font-size: 0.95rem !important;
-    }
-    #participants-modal.modal-spotlight-mode .participant-badge-text {
-      font-size: 0.95rem !important;
-      padding: 0.4rem 0.85rem !important;
     }
 
     .region-node {
@@ -492,7 +455,7 @@
       </div>
     </section>
 
-    <!-- SLIDE 3 (مع زر تكبير الـ QR المضاف حديثاً) -->
+    <!-- SLIDE 3 -->
     <section class="slide" data-slide="3">
       <div class="max-w-5xl w-full">
         <div class="anim-item flex items-center justify-between mb-4">
@@ -547,7 +510,6 @@
           </div>
 
           <div onclick="event.stopPropagation()" class="flex flex-wrap sm:flex-nowrap items-center justify-center gap-4 bg-slate-950/75 border border-amber-400/30 rounded-2xl p-3">
-            <!-- تمت إضافة زر تكبير الـ QR هنا -->
             <div class="flex flex-col items-center gap-1.5 flex-shrink-0">
               <div id="qr-q1" class="bg-white p-1 rounded-xl"></div>
               <button onclick="openQrModal('q1')" class="px-2 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] transition cursor-pointer flex items-center gap-1 shadow">
@@ -700,7 +662,7 @@
       </div>
     </section>
 
-    <!-- SLIDE 6 (مع زر تسليط الضوء المتسلسل على الدول المضاف حديثاً) -->
+    <!-- SLIDE 6 -->
     <section class="slide" data-slide="6">
       <div class="max-w-5xl w-full text-center">
         <span class="anim-item inline-block px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-extrabold tracking-widest uppercase mb-4">
@@ -739,7 +701,6 @@
           </div>
         </div>
 
-        <!-- تمت إضافة أزرار تسليط الضوء المتسلسل وإعادة التعيين هنا -->
         <div class="flex flex-wrap items-center justify-center gap-4 anim-item delay-3">
           <button onclick="highlightRegionsOneByOne()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs transition cursor-pointer shadow flex items-center gap-2">
             <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -849,7 +810,7 @@
       </div>
     </section>
 
-    <!-- SLIDE 10 (مع زر تكبير الـ QR المضاف حديثاً) -->
+    <!-- SLIDE 10 -->
     <section class="slide" data-slide="10">
       <div class="max-w-4xl w-full flex flex-col items-center text-center">
         <div class="relative w-36 h-36 flex items-center justify-center mb-6">
@@ -869,7 +830,6 @@
         </h2>
 
         <div class="anim-item delay-2 flex flex-wrap items-center justify-center gap-4 bg-slate-900/90 border border-amber-400/40 rounded-2xl p-4 max-w-xl mx-auto mb-4">
-          <!-- تمت إضافة زر تكبير الـ QR هنا -->
           <div class="flex flex-col items-center gap-1.5 flex-shrink-0">
             <div id="qr-q10" class="bg-white p-1 rounded-xl"></div>
             <button onclick="openQrModal('q10')" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[11px] transition cursor-pointer flex items-center gap-1 shadow">
@@ -903,7 +863,7 @@
       </div>
     </section>
 
-    <!-- SLIDE 11 -->
+    <!-- SLIDE 11 (تم ضبط الصورة لتظهر بشكل كامل وتفعيل زر تسليط الضوء لفريق الفائزين) -->
     <section id="slide-11" class="slide" data-slide="11">
       <div class="spotlight-beam"></div>
 
@@ -917,65 +877,66 @@
         </button>
       </div>
 
-      <div class="reveal-card z-20 max-w-4xl w-full max-h-[86vh] overflow-y-auto px-1">
+      <div class="reveal-card z-20 max-w-4xl w-full max-h-[88vh] overflow-y-auto px-1">
         <div class="rounded-3xl p-6 sm:p-8 text-center bg-slate-900/90 backdrop-blur-xl border-2 border-amber-400 shadow-[0_0_90px_rgba(245,158,11,0.35)]">
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 border border-amber-300/50 text-amber-300 text-xs font-extrabold uppercase tracking-widest mb-4">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 border border-amber-300/50 text-amber-300 text-xs font-extrabold uppercase tracking-widest mb-3">
             <i class="fa-solid fa-crown"></i>
             <span>The Great Historical Leader Is</span>
           </div>
 
-          <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-2 drop-shadow-[0_4px_24px_rgba(251,191,36,0.45)]">
+          <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-1 drop-shadow-[0_4px_24px_rgba(251,191,36,0.45)]">
             Salah ad-Din Al-Ayyubi
           </h1>
 
-          <div class="font-display text-xl sm:text-2xl font-extrabold text-amber-400 mb-4">
+          <div class="font-display text-xl sm:text-2xl font-extrabold text-amber-400 mb-3">
             (Saladin)
           </div>
 
-          <div class="relative w-full h-72 sm:h-[26rem] rounded-2xl overflow-hidden mb-5 border-2 border-amber-400/50 shadow-2xl bg-slate-950 flex items-center justify-center">
-            <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/90 to-transparent z-10 pointer-events-none"></div>
-            <img src="data:image/png;base64,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" 
-                 alt="Salah ad-Din Al-Ayyubi Portrait" 
-                 class="w-full h-full object-contain opacity-100 transform hover:scale-105 transition duration-700"
-                 id="saladin-user-img">
-            <div class="absolute bottom-2 left-4 z-20 text-left">
-              <span class="text-[11px] font-bold tracking-widest uppercase text-amber-300 bg-black/70 px-2.5 py-1 rounded-md">
-                <i class="fa-solid fa-shield-halved mr-1"></i> Salah ad-Din Al-Ayyubi
-              </span>
-            </div>
+          <!-- تم تعديل حاوية الصورة لعرضها كاملة بوضوح ودون قص -->
+          <div class="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden mb-4 border-2 border-amber-400/50 shadow-2xl bg-slate-950 flex items-center justify-center p-2">
+            <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANEg0QDQ0QEA0REBYNFwoKDQ8PEA0WFREWFhURExMYHSggGBolGxMTITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NFQ0NFSsZFRkrKy0rKysrLTcrNystKys3Ny0tNys3Ny0rLSstNzcrLTc3Ny03Ny0tLTctLTctLTc3K//AABEIAfUB4AMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAAAQIDBAUGBwj/xAA8EAACAgIBAgYCAQMCBAMJAQEBAgADBBIRBSIGEyEyQlIxYkEUI4JRcgcVU2EzQ9IkY3FzgZKissLDFv/EABkBAQEBAQEBAAAAAAAAAAAAAAACAQMEBf/EACIRAQEAAgICAwEBAQEAAAAAAAABAhEDIRIxIjJBE0JRcf/aAAwDAQACEQMRAD8A8riCLEEpzLEMWEAhCEAhCEAhCEAhCEAhCEAhCEAj4RYUSMkkSAyEIQk+EIQoQhCGGQj4QwyEfCAyLxHQhRRCEISIRIQCEIQoQhCAyPjI+ElhCE0EaY6NMBsIQgEfGR8AjI+MgPhCEAhCEBkQRYgmBYQhAIQhAIQhAIQhAIQhAI+Mj4CGAgYCGnQiQhhYkWJNUIRYQEhFhMBCEISIQhAOIkcREgJCLCFCBiAyWgBu0+nPy+s0QR03uneFLsim25LaQtZ1KWWau0w7EKkg/kTA2EIQEMBEIgBxAdCEIDIvEURYBFiReICRYARRDCQjo2awkaWA5EfIXECQHmLG1DiPgJCKYhEBkI+EAhFhAjhCEwEIQgEIQgEIQgEIQgEIQgEIqKfACLDSRYhEUCGCEIQCEITQQhHQGwjoQGwhCAQhCAQhCAERAIs1+mdEe3Q2hq6m7g6rszQKWHhvv6gEKPQvrsrk/L+zTWz8emo111ghQoZmY7MxnQhVXytWrqoqGgW4/q3dMq/HS5krxbTffa2pqqrdVUfq0xSB8O16y4KhQBwjsiu4kteDfRYaHRQ35CbIzMPs1u31luzpGSlZRaLr6/Tmyut7FUr7qtovVMA5L13L5NZCamhA9VSiv/wAr7MzTBknFfi2xlCoDo6s0yM2kK3bzqRyNp1XT8NzWbbFHlhtQ1dibKPisweuFSEHBDqSgVm2XSEsmNjo2a06EIohghFEWA2EfxCAQhCAQhCAkcI2KJoIARYQACEIQEhCEAjTHRpgRQhCYCO4jY+A2EIQ0kIQhgj4yPgEIQhRYRojpoIQhCRCOhDDYQhAdCEIBCEIaQxIoiwGwjoQGx9aliAoJJ/CrFrrLEADkmbFeOtCMGbmxgCFraAnTq0x2RiqW2DuK2HsaS9R6vksSDemvHomN7KpmWtzyzclSdS3O2xjOeeQoA/11k7UZZYW5IJJ/JZj3NOs8OVmlanDCu2+uxjZ8qq19qq37Ms5MnQEf6jWa3Qs85Wi2/3NAayjfRva0wekYGddXWtmRbyoAcas7Ii/Glavb5kwfEeWbR5fAVbQLzfaNnVvjNE5Vd1XOVkPRwvoiDy8ek69vlNt3N+zTCsG3lLkUs1zJwi0N26arrd/8zb4t26yRe8M4qPjs+Rjo1Sql/JfYgetKeybSyrtMPq9eJdymPutJbjPZslKfrb7mX9WWauT0a1VqsOrHjjGW3tqPbs37MyzG6vjsLses2g8Jwz+Xtq+rN8vrossocu4Klgw4YIwxs1up4YAa2oE1htSyzL4mpIBFG4jjgOIoE0IBF4igQIhg4iRY2GiKIQgLEhCAkBCAmghCIkAnJQgJCITQYREICBCFBgkEICGACBEUWLEhCEAYkICEBoohAQoAhCEhERQIEhFhAACEIAJCCEAEIQhgAhCAEJEAhCEAcI0ITQQhCAAQhCAEQhCAiIQgEQhCAiIQgEQhCAEKEB/9k=" 
+             alt="Salah ad-Din Al-Ayyubi Portrait" 
+             class="w-full h-full object-contain opacity-100 transform hover:scale-105 transition duration-700"
+             id="saladin-user-img">
+          <div class="absolute bottom-2 left-4 z-20 text-left">
+            <span class="text-[11px] font-bold tracking-widest uppercase text-amber-300 bg-black/70 px-2.5 py-1 rounded-md">
+              <i class="fa-solid fa-shield-halved mr-1"></i> Salah ad-Din Al-Ayyubi
+            </span>
           </div>
-
-          <div id="slide11-winners-section" class="mb-5 text-left bg-slate-950/80 border border-emerald-400/40 rounded-2xl p-4">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <div class="flex items-center gap-2">
-                <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                  <i class="fa-solid fa-trophy text-amber-400"></i>
-                  <span>Champions Who Guessed Correctly:</span>
-                </span>
-                <span id="slide11-winners-count" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">0</span>
-              </div>
-              <button id="btn-spotlight-winners" onclick="toggleWinnersSpotlight()"
-                class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-extrabold text-xs transition transform hover:scale-105 flex items-center gap-1.5 cursor-pointer shadow-lg">
-                <i class="fa-solid fa-lightbulb"></i>
-                <span>Spotlight & Enlarge Champions</span>
-              </button>
-            </div>
-            <div id="slide11-winners-list" class="flex flex-wrap gap-2 max-h-28 overflow-y-auto">
-              <span class="text-xs text-slate-400 italic">No correct guesses recorded yet.</span>
-            </div>
-          </div>
-
-          <p class="text-sm sm:text-base text-slate-200 font-medium max-w-xl mx-auto leading-relaxed mb-6">
-            An eternal symbol of historical justice, courage, and chivalry.
-          </p>
-
-          <button onclick="resetPresentation()"
-            class="px-5 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-bold uppercase tracking-wider transition cursor-pointer">
-            <i class="fa-solid fa-rotate-left mr-1.5"></i> Replay Challenge Presentation
-          </button>
         </div>
+
+        <!-- تم ربط زر تسليط الضوء المحدث هنا ليُكبر ويسلط الضوء على الفائزين بوضوح -->
+        <div id="slide11-winners-section" class="mb-4 text-left bg-slate-950/80 border border-emerald-400/40 rounded-2xl p-4 transition-all duration-300">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-trophy text-amber-400"></i>
+                <span>Champions Who Guessed Correctly:</span>
+              </span>
+              <span id="slide11-winners-count" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">0</span>
+            </div>
+            <button id="btn-spotlight-winners" onclick="toggleWinnersSpotlight()"
+              class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-extrabold text-xs transition transform hover:scale-105 flex items-center gap-1.5 cursor-pointer shadow-lg">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span>Spotlight & Enlarge Champions</span>
+            </button>
+          </div>
+          <div id="slide11-winners-list" class="flex flex-wrap gap-2 max-h-28 overflow-y-auto">
+            <span class="text-xs text-slate-400 italic">No correct guesses recorded yet.</span>
+          </div>
+        </div>
+
+        <p class="text-sm sm:text-base text-slate-200 font-medium max-w-xl mx-auto leading-relaxed mb-4">
+          An eternal symbol of historical justice, courage, and chivalry.
+        </p>
+
+        <button onclick="resetPresentation()"
+          class="px-5 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-bold uppercase tracking-wider transition cursor-pointer">
+          <i class="fa-solid fa-rotate-left mr-1.5"></i> Replay Challenge Presentation
+        </button>
       </div>
-    </section>
+    </div>
+  </section>
 
   </main>
 
@@ -1241,6 +1202,7 @@
       document.getElementById('spotlight-dimmer').classList.remove('active');
     }
 
+    // تفعيل وتصحيح زر تسليط الضوء وتكبير أسماء المجيبين في الشريحة الأخيرة
     function toggleWinnersSpotlight() {
       const winnersSec = document.getElementById('slide11-winners-section');
       const slideEl = winnersSec ? winnersSec.closest('.slide') : null;
@@ -1308,14 +1270,12 @@
       });
     }
 
-    // وظيفة تسليط الضوء المتسلسل على الدول واحدة تلو الأخرى (للشريحة 6)
     function highlightRegionsOneByOne() {
       regionTimers.forEach(t => clearTimeout(t));
       regionTimers = [];
       const nodes = document.querySelectorAll('[data-slide="6"] .region-node');
       
       nodes.forEach((node, i) => {
-        // إطفاء الكل أولاً ثم إضاءة العنصر المستهدف تتابعياً
         node.classList.remove('lit');
         const flagBox = node.querySelector('.flag-container');
         if (flagBox) {
@@ -1329,7 +1289,7 @@
             flagBox.style.transform = 'scale(1)';
             flagBox.style.opacity = '1';
           }
-        }, i * 900); // كل 0.9 ثانية تضيء الدولة التالية مع علمها
+        }, i * 900);
         regionTimers.push(timer);
       });
     }
