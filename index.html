@@ -911,7 +911,7 @@
       </div>
     </section>
 
-    <!-- SLIDE 11 (تم ضبط الصورة لتظهر بشكل كامل وتفعيل زر تسليط الضوء لفريق الفائزين) -->
+    <!-- SLIDE 11 -->
     <section id="slide-11" class="slide" data-slide="11">
       <div class="spotlight-beam"></div>
 
@@ -1501,16 +1501,16 @@
     function getRoomId() {
       const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
       if (hashParams.get('room')) return hashParams.get('room');
-      let savedRoom = localStorage.getItem('saladin_room_id');
+      let savedRoom = localStorage.getItem('khaled_room_id');
       if (!savedRoom) {
-        savedRoom = 'saladin_' + Math.random().toString(36).substring(2, 9);
-        localStorage.setItem('saladin_room_id', savedRoom);
+        savedRoom = 'khaled_' + Math.random().toString(36).substring(2, 9);
+        localStorage.setItem('khaled_room_id', savedRoom);
       }
       return savedRoom;
     }
 
     const ROOM_ID = getRoomId();
-    const MQTT_TOPIC = 'saladin_quiz_live/' + ROOM_ID;
+    const MQTT_TOPIC = 'khaled_quiz_live/' + ROOM_ID;
     let mqttClient = null;
     let activeModalQ = 'q1';
     let selectedQ1Choice = '';
@@ -1522,7 +1522,7 @@
 
     function getStoredVotes(qId) {
       try {
-        return JSON.parse(localStorage.getItem(`saladin_live_${ROOM_ID}_${qId}`) || '[]');
+        return JSON.parse(localStorage.getItem(`khaled_live_${ROOM_ID}_${qId}`) || '[]');
       } catch (e) {
         return [];
       }
@@ -1536,7 +1536,7 @@
       } else {
         list.push(record);
       }
-      localStorage.setItem(`saladin_live_${ROOM_ID}_${qId}`, JSON.stringify(list));
+      localStorage.setItem(`khaled_live_${ROOM_ID}_${qId}`, JSON.stringify(list));
       updateAllVoteUI();
     }
 
@@ -1624,7 +1624,7 @@
     }
 
     window.addEventListener('storage', (e) => {
-      if (e.key && e.key.startsWith(`saladin_live_${ROOM_ID}_`)) {
+      if (e.key && e.key.startsWith(`khaled_live_${ROOM_ID}_`)) {
         updateAllVoteUI();
       }
     });
@@ -1802,14 +1802,10 @@
         .replace(/[^a-zء-ي]/g, '');
 
       const validKeywords = [
-        'saladin',
-        'saladdin',
-        'salahaddin',
-        'salahaldin',
-        'salaheddin',
-        'salahuddin',
-        'صلاحالدين',
-        'صلاحالدينالايوبي'
+        'khaled',
+        'khalid',
+        'خالد',
+        'خالدبنالوليد'
       ];
 
       return validKeywords.some(kw => normalized.includes(kw));
@@ -1980,7 +1976,7 @@
     }
 
     function clearQuestionVotes() {
-      localStorage.removeItem(`saladin_live_${ROOM_ID}_${activeModalQ}`);
+      localStorage.removeItem(`khaled_live_${ROOM_ID}_${activeModalQ}`);
       updateAllVoteUI();
     }
 
@@ -2052,4 +2048,4 @@
   </div>
 
 </body>
-  </html>
+</html>
